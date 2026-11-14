@@ -47,7 +47,7 @@
               <div class="support-title-row">
                 <h1>Armuse Support</h1>
                 <span class="support-badge">v${esc(APP_VERSION)}</span>
-                <span class="support-badge support-badge-mit">MIT</span>
+                <span class="support-badge support-badge-license">Freeware</span>
               </div>
               <p class="support-sub">Dukungan & donasi langsung untuk pengembang: <strong>${esc(AUTHOR_NAME)}</strong></p>
             </div>

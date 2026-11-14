@@ -2,11 +2,11 @@
 
 [![Support via Saweria](https://img.shields.io/badge/☕_Support_via_Saweria-alfaathhh-f97316?style=for-the-badge&logo=buymeacoffee&logoColor=white)](https://saweria.co/alfaathhh)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Armuse_1.0.3-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/senioralfath1-ux/Armuse-1.0.3)
-[![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
+[![License: Freeware](https://img.shields.io/badge/License-Freeware-blue?style=for-the-badge)](LICENSE)
 
-**Pemutar musik desktop audiophile open-source** untuk koleksi lagu pribadi Anda — lengkap dengan deteksi **Hi-Res Lossless & Dolby Atmos**, **Equalizer 10-band**, **Uji Kualitas A/B**, **Dynamic Island 5-Slide**, **Lirik Sinkron Multi-Bahasa**, **YouTube Audio Downloader**, **Google Drive Cloud Streaming**, dan **Aplikasi Pendamping iPhone / Smartphone (PWA)**.
+**Pemutar musik desktop audiophile** untuk koleksi lagu pribadi Anda — lengkap dengan deteksi **Hi-Res Lossless & Dolby Atmos**, **Equalizer 10-band**, **Uji Kualitas A/B**, **Dynamic Island 5-Slide**, **Lirik Sinkron Multi-Bahasa**, **YouTube Audio Downloader**, **Google Drive Cloud Streaming**, dan **Aplikasi Pendamping iPhone / Smartphone (PWA)**.
 
-Dibuat oleh **Alfath** · Lisensi **MIT** · Tanpa iklan, tanpa langganan, dan menghormati privasi lokal Anda.
+Dibuat oleh **Alfath** · Lisensi **Freeware (Hak Cipta Dilindungi)** · Gratis diunduh & digunakan untuk keperluan pribadi non-komersial, dilarang modifikasi kode atau diperjualbelikan.
 
 - **☕ Dukung Kreator (Saweria):** [https://saweria.co/alfaathhh](https://saweria.co/alfaathhh)
 - **⭐ Repositori GitHub:** [https://github.com/senioralfath1-ux/Armuse-1.0.3](https://github.com/senioralfath1-ux/Armuse-1.0.3)
@@ -202,4 +202,4 @@ Jika Anda menyukai Armuse dan ingin mendukung pengembangan fitur-fitur baru ke d
 
 ## Lisensi
 
-Proyek ini dilisensikan di bawah **MIT License** — lihat berkas [LICENSE](LICENSE) untuk rincian lengkap.
+Proyek ini dilisensikan di bawah **Freeware EULA (All Rights Reserved)** — bebas diunduh, dipasang, dan dibagikan secara utuh untuk penggunaan pribadi non-komersial. Dilarang memodifikasi kode atau memperjualbelikannya. Lihat berkas [LICENSE](LICENSE) untuk ketentuan hukum lengkap.

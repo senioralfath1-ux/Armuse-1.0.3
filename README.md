@@ -17,7 +17,7 @@
 
 <p align="center">
   <a href="https://github.com/senioralfath1-ux/Armuse-1.0.3/releases"><img src="https://img.shields.io/badge/Release-v1.0.3-blue?style=flat-square" alt="Release"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License: MIT"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Freeware-blue.svg?style=flat-square" alt="License: Freeware"></a>
   <a href="https://saweria.co/alfaathhh"><img src="https://img.shields.io/badge/☕_Saweria-Support-f97316?style=flat-square&logo=buymeacoffee&logoColor=white" alt="Saweria"></a>
 </p>
 
@@ -116,4 +116,5 @@ npm run dist        # Build production installers (.exe, .dmg, .AppImage)
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+Custom Freeware (All Rights Reserved). See [LICENSE](LICENSE).
+Free to download, install, and share for personal, non-commercial use. Modification or commercial resale is prohibited.
