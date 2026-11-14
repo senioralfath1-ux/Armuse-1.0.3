@@ -305,6 +305,7 @@
 
       // Support / Dukung Kreator
       'nav.support': 'Dukung Kreator',
+      'support.topbarBtn': 'Support Saweria',
       'support.title': 'Dukung Armuse',
       'support.subtitle': 'Armuse 100% gratis, bebas iklan, dan open-source. Dikembangkan secara independen oleh {author}.',
       'support.saweria.bannerTitle': 'Traktir Kopi lewat Saweria',
@@ -631,6 +632,7 @@
 
       // Support Creator
       'nav.support': 'Support Creator',
+      'support.topbarBtn': 'Support Saweria',
       'support.title': 'Support Armuse',
       'support.subtitle': 'Armuse is 100% free, ad-free, and open-source. Independently crafted by {author}.',
       'support.saweria.bannerTitle': 'Support via Saweria',
@@ -957,6 +959,7 @@
 
       // Support Creator
       'nav.support': '開発者を支援',
+      'support.topbarBtn': 'Saweria 支援',
       'support.title': 'Armuse を支援する',
       'support.subtitle': 'Armuse は完全無料・広告なしのオープンソース音楽プレーヤーです。{author} が個人開発しています。',
       'support.saweria.bannerTitle': 'Saweria で開発者を応援',

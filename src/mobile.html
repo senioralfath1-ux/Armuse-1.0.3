@@ -157,6 +157,25 @@
       background: var(--amber);
       box-shadow: 0 0 8px var(--amber);
     }
+    .saweria-capsule {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.22), rgba(245, 158, 11, 0.16));
+      color: #fb923c;
+      border: 0.5px solid rgba(249, 115, 22, 0.45);
+      text-decoration: none;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    .saweria-capsule:active {
+      transform: scale(0.94);
+      background: linear-gradient(135deg, #f97316, #f59e0b);
+      color: #fff;
+    }
 
     /* Search Box */
     .search-box {
@@ -1745,6 +1764,10 @@
       <h1>Armuse</h1>
     </div>
     <div class="header-actions">
+      <a href="https://saweria.co/alfaathhh" target="_blank" rel="noopener noreferrer" class="saweria-capsule" title="Dukung Alfath via Saweria">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <span>Saweria</span>
+      </a>
       <div class="status-capsule" id="status-capsule">
         <span class="status-dot"></span>
         <span id="status-text">Online</span>

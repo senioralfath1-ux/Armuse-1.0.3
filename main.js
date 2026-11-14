@@ -850,6 +850,13 @@ function setupTray() {
       },
       { type: 'separator' },
       {
+        label: '☕ Support via Saweria (saweria.co/alfaathhh)',
+        click: () => {
+          shell.openExternal('https://saweria.co/alfaathhh').catch(() => {});
+        },
+      },
+      { type: 'separator' },
+      {
         label: 'Keluar Sepenuhnya (Quit)',
         click: () => {
           isQuitting = true;

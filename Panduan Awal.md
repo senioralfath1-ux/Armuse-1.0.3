@@ -1,11 +1,15 @@
 # Armuse
 
+[![Support via Saweria](https://img.shields.io/badge/☕_Support_via_Saweria-alfaathhh-f97316?style=for-the-badge&logo=buymeacoffee&logoColor=white)](https://saweria.co/alfaathhh)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Armuse_1.0.3-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/senioralfath1-ux/Armuse-1.0.3)
+[![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
+
 **Pemutar musik desktop audiophile open-source** untuk koleksi lagu pribadi Anda — lengkap dengan deteksi **Hi-Res Lossless & Dolby Atmos**, **Equalizer 10-band**, **Uji Kualitas A/B**, **Dynamic Island 5-Slide**, **Lirik Sinkron Multi-Bahasa**, **YouTube Audio Downloader**, **Google Drive Cloud Streaming**, dan **Aplikasi Pendamping iPhone / Smartphone (PWA)**.
 
 Dibuat oleh **Alfath** · Lisensi **MIT** · Tanpa iklan, tanpa langganan, dan menghormati privasi lokal Anda.
 
-- **Repositori GitHub:** [https://github.com/senioralfath1-ux/Armuse-1.0.3](https://github.com/senioralfath1-ux/Armuse-1.0.3)
-- **Dukung Kreator (Saweria):** [https://saweria.co/alfaathhh](https://saweria.co/alfaathhh)
+- **☕ Dukung Kreator (Saweria):** [https://saweria.co/alfaathhh](https://saweria.co/alfaathhh)
+- **⭐ Repositori GitHub:** [https://github.com/senioralfath1-ux/Armuse-1.0.3](https://github.com/senioralfath1-ux/Armuse-1.0.3)
 
 ---
 
@@ -186,9 +190,12 @@ ARMUSE_DATA_DIR=/path/ke/folder-data npm start
 
 **Armuse** dikembangkan secara independen oleh **Alfath** dan dibagikan secara gratis serta *open-source* di bawah lisensi MIT.
 
-Jika Anda menyukai Armuse dan ingin mendukung pengembangan fitur-fitur baru ke depannya, Anda dapat memberikan dukungan melalui:
+Jika Anda menyukai Armuse dan ingin mendukung pengembangan fitur-fitur baru ke depannya, klik tombol di bawah ini:
 
-- ☕ **Saweria:** [https://saweria.co/alfaathhh](https://saweria.co/alfaathhh) *(tersedia juga kode QR langsung di menu **Dukung Kreator** di dalam aplikasi)*
+[![Traktir Kopi via Saweria](https://img.shields.io/badge/☕_Traktir_Kopi_di_Saweria-saweria.co%2Falfaathhh-f97316?style=for-the-badge&logo=buymeacoffee&logoColor=white)](https://saweria.co/alfaathhh)
+[![Beri Star di GitHub](https://img.shields.io/badge/⭐_Beri_Star_di_GitHub-Armuse_1.0.3-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/senioralfath1-ux/Armuse-1.0.3)
+
+- ☕ **Saweria:** [https://saweria.co/alfaathhh](https://saweria.co/alfaathhh) *(tersedia juga tombol **Support Saweria** di bilah atas aplikasi & kode QR di menu **Dukung Kreator**)*
 - ⭐ **GitHub:** Berikan bintang (*Star*) dan bagikan repositori [senioralfath1-ux/Armuse-1.0.3](https://github.com/senioralfath1-ux/Armuse-1.0.3)
 
 ---
