@@ -1,112 +1,100 @@
+<p align="center">
+  <img alt="Armuse Music Player" src="banner.jpg" width="100%">
+</p>
+
 <div align="center">
-  <img src="banner.jpg" alt="Armuse Banner" width="100%" />
 
-  # Armuse
+# Armuse
 
-  **Pemutar musik desktop gratis & open-source untuk audiophile dan penikmat musik kasual.**  
-  Tanpa iklan, tanpa pelacakan, dan 100% menghormati privasi data lokal Anda.
-
-  **Tersedia untuk:** Windows • macOS • Linux • iPhone / Android (PWA)
-
-  [![Release](https://img.shields.io/badge/Release-v1.0.3-blue?style=flat-square)](https://github.com/senioralfath1-ux/Armuse-1.0.3/releases)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
-  [![Support via Saweria](https://img.shields.io/badge/☕_Saweria-Dukung_Kreator-f97316?style=flat-square&logo=buymeacoffee&logoColor=white)](https://saweria.co/alfaathhh)
-  [![GitHub Stars](https://img.shields.io/github/stars/senioralfath1-ux/Armuse-1.0.3?style=flat-square&color=yellow)](https://github.com/senioralfath1-ux/Armuse-1.0.3/stargazers)
 </div>
 
----
+<div align="center">
 
-## Fitur Utama
+  Armuse is a free, open-source music player without ads or tracking. Search for any song or artist, build playlists, and start listening.<br>
+  Runs on Windows, macOS, and Linux.
 
-- **Audio Audiophile & Bit-Perfect** — Deteksi otomatis Hi-Res Lossless (>48 kHz / 24-bit), FLAC/ALAC, Dolby Atmos (JOC), diagram rantai pemrosesan sinyal transparan, dan uji komparasi dengar A/B real-time tanpa jeda.
-- **Equalizer 10-Band & Limiter** — Kontrol frekuensi 31 Hz–16 kHz (±12 dB), 11 preset bawaan + custom, kurva respons interaktif, dan pemilihan perangkat output (DAC eksternal) langsung.
-- **Lirik Sinkron Multi-Tier** — Pengambilan lirik otomatis via LRCLIB & Kugou (J-Pop, Romaji, Barat, Indonesia), navigasi lompat detik klik-per-baris, dan editor lirik manual.
-- **Pencarian Pintar Multi-Aksara (`jpSearch`)** — Transliterasi otomatis dua arah Romaji ↔ Hiragana ↔ Katakana ↔ Kanji untuk pencarian lagu Anime/J-Pop tanpa repot ganti keyboard IME.
-- **Layar Now Playing & Visualizer** — Tampilan panggung resolusi penuh dengan sampul besar, lirik sinkron, dan spektrum audio visualizer real-time yang dinamis.
-- **Dynamic Island & Mode Mini** — Kapsul multitasking 5-slide bergaya iOS (`Alt+I`) dengan auto-dock di tepi atas layar, Mode Mini klasik (`Alt+M`), dan System Tray background player.
-- **Aplikasi Pendamping HP (PWA Port 4000)** — Pindai QR untuk akses pemutar bergaya Apple Music di iPhone/Android melalui jaringan lokal (`http://al.local:4000`), lengkap dengan kontrol layar kunci dan simpan offline (IndexedDB).
-- **Google Drive Cloud Streaming** — Putar langsung folder publik Google Drive secara instan (*byte-range streaming*) tanpa perlu menunggu unduh penuh, didukung smart cache LRU offline.
-- **YouTube Audio Downloader** — Unduh audio dari URL YouTube langsung ke pustaka musik lokal dalam format MP3 320 kbps, FLAC, WAV, M4A, atau Opus (`yt-dlp` + `ffmpeg`).
-- **Statistik & "Wrapped Kamu"** — Rekap kebiasaan mendengar 6-slide ala Spotify Wrapped (1080×1920) dan kartu cerita lagu siap ekspor PNG.
-- **3 Tema Visual & Multi-Bahasa** — Tema Dark (biru laut khas Armuse), Light, dan Liquid Glass (efek kaca cair iOS), serta antarmuka Bahasa Indonesia, English, dan 日本語.
+</div>
 
----
+<p align="center">
+  <a href="https://github.com/senioralfath1-ux/Armuse-1.0.3/releases"><img src="https://img.shields.io/badge/Release-v1.0.3-blue?style=flat-square" alt="Release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=flat-square" alt="License: MIT"></a>
+  <a href="https://saweria.co/alfaathhh"><img src="https://img.shields.io/badge/☕_Saweria-Support-f97316?style=flat-square&logo=buymeacoffee&logoColor=white" alt="Saweria"></a>
+</p>
 
-## Unduh & Pemasangan
+## Download
 
-| Sistem Operasi | Berkas Instalasi | Panduan |
-|---|---|---|
-| **Windows** | `Armuse Setup 1.0.3.exe` | Unduh dari [Releases](https://github.com/senioralfath1-ux/Armuse-1.0.3/releases) lalu jalankan installer |
-| **macOS** | `Armuse-1.0.3.dmg` | Buka file `.dmg` dan seret ikon ke folder `Applications` |
-| **Linux (AppImage)** | `Armuse-1.0.3.AppImage` | Beri izin eksekusi (`chmod +x`), lalu jalankan |
-| **Linux (Debian/Ubuntu)** | `armuse_1.0.3_amd64.deb` | Pasang via `sudo apt install ./armuse_1.0.3_amd64.deb` |
+Grab the latest release for your platform from the [Releases page](https://github.com/senioralfath1-ux/Armuse-1.0.3/releases).
 
----
+| Platform | Formats |
+|----------|---------|
+| Windows | `Armuse Setup 1.0.3.exe` |
+| macOS | `Armuse-1.0.3.dmg` |
+| Linux | `.AppImage`, `.deb` |
+
+## Features
+
+- Bit-perfect Hi-Res Lossless (>48 kHz / 24-bit), FLAC/ALAC, and Dolby Atmos audio playback
+- 10-band real-time equalizer with anti-clipping limiter and custom presets
+- Instant lossless vs compressed A/B listening comparison test
+- Synchronized multi-tier lyrics with real-time fetching from LRCLIB and Kugou
+- Smart multi-script search (`jpSearch`) with Romaji, Kanji, and Kana transliteration
+- Full-screen Now Playing stage with interactive audio spectrum visualizer
+- iOS-inspired Dynamic Island mini player with 5 multitasking slides (`Alt + I`)
+- Mobile Companion PWA for iPhone & Android over LAN with offline caching
+- Google Drive cloud streaming with instant byte-range playback
+- Built-in YouTube audio downloader with high-bitrate conversion (`yt-dlp` + `ffmpeg`)
+- Listening habits stats and 6-slide exportable "Your Wrapped" recap (1080×1920)
+- Light, Dark, and Liquid Glass themes with multi-language interface
+
+## Mobile Companion
+
+Control Armuse or listen directly from your phone with the Mobile Companion PWA:
+
+Open the **iPhone & Mobile** menu in the desktop app and scan the QR code (or navigate to `http://<your-pc-ip>:4000`). Add to Home Screen on iOS or Android for a native app experience with background audio and offline storage.
 
 ## Development
 
-### Persyaratan
-* [Node.js](https://nodejs.org) (v18 atau lebih baru)
-* npm atau pnpm
+Armuse is built with Electron and modern web technologies.
 
-### Menjalankan dari Kode Sumber
+### Prerequisites
+
+- Node.js >= 18
+- npm
+
+### Getting started
+
 ```bash
-# Clone repositori
 git clone https://github.com/senioralfath1-ux/Armuse-1.0.3.git
 cd Armuse-1.0.3
-
-# Pasang dependensi
 npm install
-
-# Jalankan aplikasi (Development mode)
 npm start
 ```
 
-### Membuat File Installer (Build)
+### Useful commands
+
 ```bash
-npm run dist
-```
-Paket instalasi siap pakai akan dibuat di dalam direktori `dist/`.
-
----
-
-## Pintasan Keyboard Utama
-
-| Pintasan | Lingkup | Fungsi |
-|---|---|---|
-| `Alt + I` | Global | Buka / tutup mode **Dynamic Island** |
-| `Alt + M` | Global | Buka / tutup **Mode Mini** klasik |
-| `Alt + Space` | Global | Putar / jeda musik di latar belakang |
-| `Alt + ←` / `→` | Global | Lagu sebelumnya / berikutnya |
-| `Spasi` | Dalam Aplikasi | Putar / jeda pemutaran lagu |
-| `Ctrl`/`Cmd` + `F` | Dalam Aplikasi | Fokus ke kotak pencarian |
-| `A` / `B` | Dalam Aplikasi | Beralih instan perbandingan audio Asli (A) & Kompresi (B) |
-
----
-
-## Penyimpanan Data & Mode Portabel
-
-Pustaka, preferensi, playlist, dan cache disimpan secara lokal di:
-- **Windows:** `%APPDATA%\Armuse`
-- **macOS:** `~/Library/Application Support/Armuse`
-- **Linux:** `~/.config/Armuse`
-
-Untuk mode portabel (mis. flashdisk), gunakan variabel lingkungan:
-```bash
-ARMUSE_DATA_DIR=/path/ke/folder-data npm start
+npm start           # Run the player in dev mode
+npm run dev         # Run with auto-reload (nodemon)
+npm run dist        # Build production installers (.exe, .dmg, .AppImage)
 ```
 
----
+## Shortcuts
 
-## Dukungan & Komunitas
+| Shortcut | Scope | Action |
+|----------|-------|--------|
+| `Alt + I` | Global | Toggle Dynamic Island |
+| `Alt + M` | Global | Toggle Mini Mode |
+| `Alt + Space` | Global | Play / Pause in background |
+| `Alt + ←` / `→` | Global | Previous / Next track |
+| `Space` | App | Play / Pause |
+| `Ctrl`/`Cmd` + `F` | App | Focus search bar |
+| `A` / `B` | App | Switch A/B audio comparison |
 
-**Armuse** dikembangkan secara independen dan gratis untuk semua orang. Dukungan Anda sangat berarti untuk kelangsungan pengembangan fitur-fitur baru:
+## Community & Support
 
-* ☕ **Dukung lewat Saweria:** [saweria.co/alfaathhh](https://saweria.co/alfaathhh)
-* ⭐ **Beri Star di GitHub:** [senioralfath1-ux/Armuse-1.0.3](https://github.com/senioralfath1-ux/Armuse-1.0.3)
+- ☕ **Saweria:** [saweria.co/alfaathhh](https://saweria.co/alfaathhh)
+- ⭐ **GitHub:** Star the repository at [senioralfath1-ux/Armuse-1.0.3](https://github.com/senioralfath1-ux/Armuse-1.0.3)
 
----
+## License
 
-## Lisensi
-
-Proyek ini dilisensikan di bawah **[MIT License](LICENSE)** — bebas digunakan, dimodifikasi, dan didistribusikan.
+MIT. See [LICENSE](LICENSE).
