@@ -1515,6 +1515,8 @@
 
     // ---------- Mode mini & Dynamic Island (satu jendela yang sama, dianimasikan main process) ----------
     function enterMiniMode() {
+      if (RD.nowPlaying) RD.nowPlaying.close();
+      window.scrollTo(0, 0);
       const r = $('#btn-mini').getBoundingClientRect();
       const origin = { x: Math.round(window.screenX + r.left + r.width / 2), y: Math.round(window.screenY + r.top + r.height / 2) };
       renderMiniBar();
@@ -1524,6 +1526,7 @@
     }
     function exitMiniMode() {
       closeMiniMenu();
+      window.scrollTo(0, 0);
       document.body.classList.remove('mini-mode', 'island-mode');
       if (api.exitMini) api.exitMini();
     }
@@ -1539,6 +1542,10 @@
     $('#mb-fav').addEventListener('click', () => { const t = current(); if (t) toggleFav([t.id]); });
     if (api.onModeChanging) {
       api.onModeChanging((mode) => {
+        window.scrollTo(0, 0);
+        if (mode === 'mini' || mode === 'island') {
+          if (RD.nowPlaying) RD.nowPlaying.close();
+        }
         document.body.classList.toggle('mini-mode', mode === 'mini');
         document.body.classList.toggle('island-mode', mode === 'island');
         if (mode === 'mini') renderMiniBar();
@@ -1618,7 +1625,7 @@
       mbMenuCloseTimer = setTimeout(() => {
         if (api.setMiniMenuOpen) api.setMiniMenuOpen(false);
         mbMenuCloseTimer = null;
-        if (mbDefaultView && mbPlaylistView) { mbDefaultView.hidden = false; mbPlaylistView.hidden = true; } // balik ke view default untuk kunjungan berikutnya
+        showMiniMenuView('default'); // balik ke view default untuk kunjungan berikutnya
       }, 200);
     }
     mbMenuTrigger.addEventListener('click', (e) => { e.stopPropagation(); if (mbMenuOpen) closeMiniMenu(); else openMiniMenu(); });
@@ -1626,13 +1633,12 @@
       if (mbMenuOpen && !mbMenuPanel.contains(e.target) && !mbMenuTrigger.contains(e.target)) closeMiniMenu();
     });
 
-    // ---- "Tambah ke playlist" di mode mini: checklist ringkas DI DALAM menu titik-3 itu sendiri,
-    // bukan dialog besar seperti mode full. Semua tetap muat di tinggi window yang sudah dibesarkan
-    // sedikit untuk menu (MINI_MENU_EXTRA di main.js), jadi tidak perlu resize tambahan sama sekali.
-    const mbDefaultView = $('#mb-menu-default'), mbPlaylistView = $('#mb-menu-playlist'), mbPlpList = $('#mb-plp-list');
+    // ---- Sub-panel di menu titik-3 mode mini (Playlist & Lirik)
+    const mbDefaultView = $('#mb-menu-default'), mbPlaylistView = $('#mb-menu-playlist'), mbLyricsView = $('#mb-menu-lyrics'), mbPlpList = $('#mb-plp-list');
     function showMiniMenuView(view) {
-      mbDefaultView.hidden = view !== 'default';
-      mbPlaylistView.hidden = view !== 'playlist';
+      if (mbDefaultView) mbDefaultView.hidden = view !== 'default';
+      if (mbPlaylistView) mbPlaylistView.hidden = view !== 'playlist';
+      if (mbLyricsView) mbLyricsView.hidden = view !== 'lyrics';
     }
     async function renderMiniPlaylistChecklist() {
       const t = current();
@@ -1648,6 +1654,67 @@
       await renderMiniPlaylistChecklist();
     }
 
+    function openMiniLyrics() {
+      showMiniMenuView('lyrics');
+      if (RD.lyrics && RD.lyrics.getCurrentLines && RD.mini && RD.mini.onLyricsTick) {
+        RD.mini.onLyricsTick(RD.lyrics.getCurrentLines());
+      }
+    }
+
+    // Registrasi listener lirik untuk Mini Player
+    RD.mini = {
+      onLyricsTick: (lines) => {
+        const curEl = $('#mb-lyr-cur');
+        const prevEl = $('#mb-lyr-prev');
+        const nextEl = $('#mb-lyr-next');
+        if (!curEl) return;
+        if (!lines || (!lines.cur && !lines.prev && !lines.next)) {
+          curEl.textContent = 'Belum ada lirik untuk lagu ini.';
+          if (prevEl) prevEl.textContent = '';
+          if (nextEl) nextEl.textContent = '';
+          return;
+        }
+        curEl.textContent = lines.cur || '…';
+        if (prevEl) prevEl.textContent = lines.prev || '';
+        if (nextEl) nextEl.textContent = lines.next || '';
+      }
+    };
+
+    // Klik judul/cover di mode mini untuk membuka lirik berjalan di dalam mini panel
+    $('#mb-title')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!mbMenuOpen) {
+        openMiniMenu();
+        openMiniLyrics();
+      } else if (mbLyricsView && !mbLyricsView.hidden) {
+        closeMiniMenu();
+      } else {
+        openMiniLyrics();
+      }
+    });
+    $('#mb-cover')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!mbMenuOpen) {
+        openMiniMenu();
+        openMiniLyrics();
+      } else if (mbLyricsView && !mbLyricsView.hidden) {
+        closeMiniMenu();
+      } else {
+        openMiniLyrics();
+      }
+    });
+
+    $('#mb-lyr-search')?.addEventListener('click', async () => {
+      if (RD.lyrics && RD.lyrics.fetchOnline) {
+        const curEl = $('#mb-lyr-cur');
+        if (curEl) curEl.textContent = 'Mencari lirik online…';
+        await RD.lyrics.fetchOnline();
+        if (RD.lyrics.getCurrentLines && RD.mini && RD.mini.onLyricsTick) {
+          RD.mini.onLyricsTick(RD.lyrics.getCurrentLines());
+        }
+      }
+    });
+
     // ---- Volume di mode mini — pakai state & fungsi yang sama dengan slider volume mode full.
     const mbVolume = $('#mb-volume');
     mbVolume.addEventListener('input', () => { S.muted = false; S.settings.volume = mbVolume.value / 100; RD.applyVol(); saveSoon(); });
@@ -1659,6 +1726,7 @@
       e.stopPropagation();
       const action = btn.dataset.menu;
       if (action === 'playlist') { openMiniPlaylistChecklist(); return; }
+      if (action === 'lyrics') { openMiniLyrics(); return; }
       if (action === 'back') { showMiniMenuView('default'); return; }
       if (action === 'playlist-new') {
         const t = current();

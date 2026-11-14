@@ -433,6 +433,8 @@
 
   // ---------- Mode Masuk & Keluar ----------
   function enter() {
+    if (RD.nowPlaying) RD.nowPlaying.close();
+    window.scrollTo(0, 0);
     active = true;
     expanded = false;
     const root = $('#dynamic-island');
@@ -448,6 +450,7 @@
   }
 
   function exitToFull() {
+    window.scrollTo(0, 0);
     active = false;
     expanded = false;
     stopLoop();
@@ -461,6 +464,7 @@
   }
 
   function switchToMini() {
+    window.scrollTo(0, 0);
     active = false;
     expanded = false;
     stopLoop();
@@ -634,6 +638,17 @@
         const curEl = $('#di-lyr-cur');
         if (curEl) curEl.textContent = 'Mencari lirik tersinkronisasi…';
         await RD.lyrics.fetchOnline();
+        if (RD.lyrics.getCurrentLines) {
+          onLyricsTick(RD.lyrics.getCurrentLines());
+        }
+      }
+    });
+
+    $('#di-lyrics-box')?.addEventListener('click', () => {
+      const curEl = $('#di-lyr-cur');
+      if (curEl && (curEl.textContent.includes('Putar lagu') || curEl.textContent.includes('Belum ada lirik'))) {
+        const searchBtn = $('#di-lyr-search');
+        if (searchBtn) searchBtn.click();
       }
     });
 

@@ -146,6 +146,7 @@
     }
 
     if (RD.island && RD.island.onLyricsTick) RD.island.onLyricsTick(getCurrentLines());
+    if (RD.mini && RD.mini.onLyricsTick) RD.mini.onLyricsTick(getCurrentLines());
   }
 
   async function fetchOnline(query = null) {
@@ -300,9 +301,29 @@
     if (box) {
       box.querySelectorAll('p').forEach((p, i) => p.classList.toggle('cur', i === idx));
       const cur = box.querySelector('p.cur');
-      if (cur) cur.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      if (cur) {
+        const npov = $('#nowplaying');
+        const isNpOpen = npov && npov.classList.contains('open');
+        const isCompact = document.body.classList.contains('mini-mode') || document.body.classList.contains('island-mode');
+        // Hanya scroll panel lirik jika Now Playing aktif dan tidak di mode mini/island
+        // Gunakan container.scrollTo langsung agar tidak pernah menggulung viewport/window
+        if (isNpOpen && !isCompact) {
+          const container = $('#npt-lyrics') || cur.closest('.npt');
+          if (container) {
+            const curTop = cur.offsetTop;
+            const containerH = container.clientHeight;
+            const curH = cur.clientHeight;
+            container.scrollTo({
+              top: Math.max(0, curTop - containerH / 2 + curH / 2),
+              behavior: 'smooth'
+            });
+          }
+        }
+      }
     }
-    if (RD.island && RD.island.onLyricsTick) RD.island.onLyricsTick(getCurrentLines());
+    const currentLines = getCurrentLines();
+    if (RD.island && RD.island.onLyricsTick) RD.island.onLyricsTick(currentLines);
+    if (RD.mini && RD.mini.onLyricsTick) RD.mini.onLyricsTick(currentLines);
   }
 
   function getCurrentLines() {

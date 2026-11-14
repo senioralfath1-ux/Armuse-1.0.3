@@ -34,6 +34,14 @@
   }
 
   function open() {
+    // Jika sedang dalam mode mini atau dynamic island, kembalikan ke mode normal terlebih dahulu
+    // agar overlay tidak menimpa window mini yang sempit
+    if (document.body.classList.contains('mini-mode') || document.body.classList.contains('island-mode')) {
+      if (window.api && window.api.exitMini) window.api.exitMini();
+      if (window.api && window.api.exitIsland) window.api.exitIsland();
+      document.body.classList.remove('mini-mode', 'island-mode');
+    }
+    window.scrollTo(0, 0);
     const ov = $('#nowplaying');
     if (!ov) return;
     ov.classList.add('open');
@@ -50,6 +58,7 @@
     ov.inert = true;
     ov.setAttribute('aria-hidden', 'true');
     if (RD.visualizer) RD.visualizer.stop();
+    window.scrollTo(0, 0);
     // Bukan <dialog> bawaan, jadi tidak ada event 'close' asli — kirim event kustom sendiri
     // supaya app.js (mode mini) tahu kapan harus mengecilkan window lagi.
     ov.dispatchEvent(new CustomEvent('rd:closed'));
