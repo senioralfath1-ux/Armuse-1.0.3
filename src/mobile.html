@@ -1,0 +1,4164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#060a14">
+  <meta name="description" content="Armuse Mobile Companion - Apple Music Experience">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icon.png">
+  <link rel="icon" type="image/png" href="/icon.png">
+  <title>Armuse</title>
+  <style>
+
+    :root {
+      --bg: #060a14;
+      --navy-deep: #091224;
+      --navy-card: #0d172c;
+      --surface: rgba(13, 23, 44, 0.72);
+      --raised: rgba(20, 35, 66, 0.85);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(56, 189, 248, 0.28);
+      --accent: #22c55e;
+      --accent-glow: rgba(34, 197, 94, 0.35);
+      --apple-pink: #fa243c;
+      --apple-pink-glow: rgba(250, 36, 60, 0.35);
+      --text: #ffffff;
+      --muted: #8e9eb5;
+      --faint: #475569;
+      --gold: #fbbf24;
+      --amber: #f59e0b;
+      --safe-top: env(safe-area-inset-top, 24px);
+      --safe-bottom: env(safe-area-inset-bottom, 34px);
+      --spring: cubic-bezier(0.32, 0.72, 0, 1);
+      --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --spring-soft: cubic-bezier(0.22, 1, 0.36, 1);
+      --tap-press: cubic-bezier(0.2, 0.8, 0.2, 1);
+      --tap-release: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      --tap-curve: cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      margin: 0;
+      padding: 0;
+      scrollbar-width: none !important;
+      touch-action: manipulation;
+    }
+    *::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+    img { max-width: 100%; display: block; }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      min-height: 100vh;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-font-smoothing: antialiased;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    body {
+      padding-top: 0;
+      padding-bottom: calc(110px + var(--safe-bottom, 20px));
+    }
+    #navy-glow {
+      position: fixed;
+      inset: -15%;
+      width: 130%;
+      height: 130%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.42;
+      filter: blur(80px);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      padding-top: max(12px, var(--safe-top));
+      padding-left: 18px;
+      padding-right: 18px;
+      padding-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(6, 10, 20, 0.88);
+      backdrop-filter: blur(30px) saturate(190%);
+      -webkit-backdrop-filter: blur(30px) saturate(190%);
+      border-bottom: 0.5px solid var(--border);
+      z-index: 80;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+    }
+    .brand h1 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #fff;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-icon-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 0.5px solid var(--border);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .header-icon-btn:active {
+      transform: scale(0.92);
+      background: rgba(255, 255, 255, 0.16);
+    }
+    .status-capsule {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(34, 197, 94, 0.12);
+      color: var(--accent);
+      border: 0.5px solid rgba(34, 197, 94, 0.28);
+    }
+    .status-capsule.offline {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--amber);
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+    .status-capsule.offline .status-dot {
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
+    }
+
+    /* Search Box */
+    .search-box {
+      padding: 10px 18px 8px;
+      position: relative;
+      z-index: 20;
+    }
+    .search-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      padding: 11px 14px 11px 40px;
+      font-size: 14.5px;
+      color: #fff;
+      outline: none;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(20px);
+    }
+    .search-input:focus {
+      border-color: var(--accent);
+      background: var(--raised);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    /* Single Header in Detail Mode */
+    body.detail-mode header,
+    body.detail-mode #search-box {
+      display: none !important;
+    }
+
+    /* Views */
+    .view-container {
+      position: relative;
+      z-index: 10;
+      padding: 0 18px;
+    }
+    .view {
+      display: none;
+      padding-bottom: 40px;
+    }
+    .view.active {
+      display: block;
+      opacity: 1 !important;
+      animation: iosTabEnter 0.28s var(--spring-soft) forwards;
+    }
+    @keyframes iosTabEnter {
+      0% { opacity: 0; transform: translateY(8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+
+    /* ============================================================
+       DYNAMIC TAP & CLICK KEYFRAME ANIMATIONS (iOS Physics)
+       ============================================================ */
+    @keyframes ctaPop {
+      0% { transform: scale(0.86); }
+      45% { transform: scale(1.14); }
+      100% { transform: scale(1); }
+    }
+    @keyframes heartPop {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.44) rotate(-14deg); }
+      50% { transform: scale(0.88) rotate(7deg); }
+      75% { transform: scale(1.14) rotate(-3deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    @keyframes navTabPop {
+      0% { transform: scale(0.76); }
+      45% { transform: scale(1.26); }
+      100% { transform: scale(1); }
+    }
+    @keyframes nudgeNext {
+      0% { transform: scale(0.88) translateX(6px); }
+      50% { transform: scale(1.06) translateX(-2px); }
+      100% { transform: scale(1) translateX(0); }
+    }
+    @keyframes nudgePrev {
+      0% { transform: scale(0.88) translateX(-6px); }
+      50% { transform: scale(1.06) translateX(2px); }
+      100% { transform: scale(1) translateX(0); }
+    }
+    @keyframes chipPop {
+      0% { transform: scale(0.88); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+
+    /* Section Headings */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 18px 0 12px;
+    }
+    .section-title {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #fff;
+    }
+    .section-link {
+      font-size: 12.5px;
+      color: var(--accent);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(16, 29, 56, 0.95), rgba(9, 16, 32, 0.92));
+      border: 0.5px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.45);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-content { flex: 1; min-width: 0; }
+    .hero-badge {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 800;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 5px;
+    }
+    .hero-title {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hero-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hero-play-btn {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      color: #000000;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(255,255,255,0.25);
+      transition: transform 0.15s;
+    }
+    .hero-play-btn:active { transform: scale(0.95); }
+    .hero-thumb-wrap {
+      width: 82px;
+      height: 82px;
+      border-radius: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .hero-thumb { width: 100%; height: 100%; object-fit: cover; }
+
+    /* Carousel & Grids */
+    .carousel-row {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin: 0 -18px;
+      padding-left: 18px;
+      padding-right: 18px;
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .carousel-row::-webkit-scrollbar { display: none; }
+    .carousel-card {
+      width: 136px;
+      min-width: 136px;
+      max-width: 136px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      cursor: pointer;
+      transition: transform 0.26s var(--spring-bounce);
+      will-change: transform;
+    }
+    .carousel-card:active {
+      transform: scale(0.92) translateY(2px);
+      transition: transform 0.07s var(--tap-press);
+    }
+    .carousel-thumb-wrap {
+      width: 136px;
+      height: 136px;
+      aspect-ratio: 1 / 1;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--navy-card);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+      margin-bottom: 8px;
+      flex-shrink: 0;
+    }
+    .carousel-thumb {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+    .carousel-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+    .carousel-sub {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+
+    /* Artist Row */
+    .artist-row {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin: 0 -18px;
+      padding-left: 18px;
+      padding-right: 18px;
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .artist-row::-webkit-scrollbar { display: none; }
+    .artist-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 76px;
+      min-width: 76px;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      cursor: pointer;
+      transition: transform 0.18s var(--tap-curve);
+    }
+    .artist-item:active { transform: scale(0.92); }
+    .artist-avatar {
+      width: 68px;
+      height: 68px;
+      aspect-ratio: 1 / 1;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      background: var(--navy-card);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+      border: 1px solid var(--border);
+    }
+    .artist-name {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #fff;
+      margin-top: 6px;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    /* Album Grid - BULLETPROOF 2-COLUMN SQUIRCLE */
+    .album-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .album-card {
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
+      overflow: hidden;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 18px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.18s var(--tap-curve), background 0.18s;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    .album-card:active {
+      transform: scale(0.92) translateY(3px);
+      background: rgba(24, 42, 78, 0.95);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+      transition: transform 0.07s var(--tap-press);
+    }
+    .album-art-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--navy-card);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      flex-shrink: 0;
+    }
+    .album-art {
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+    }
+    .album-meta-box {
+      min-width: 0;
+      width: 100%;
+      overflow: hidden;
+    }
+    .album-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+    .album-artist {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.3;
+    }
+    .track-thumb-fallback {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      color: #94a3b8;
+    }
+
+    /* Track List */
+    .track-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .track-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 12px;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: transform 0.24s var(--spring-bounce), background 0.16s ease, border-color 0.2s;
+      will-change: transform;
+    }
+    .track-item:active {
+      transform: scale(0.972);
+      background: rgba(255, 255, 255, 0.12) !important;
+      transition: transform 0.05s var(--tap-press);
+    }
+    .track-item.playing {
+      background: rgba(34, 197, 94, 0.12);
+      border-color: rgba(34, 197, 94, 0.35);
+    }
+    .track-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: var(--navy-card);
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+    }
+    .track-info { flex: 1; min-width: 0; }
+    .track-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .track-sub {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .badge-quality {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1.5px 5px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      letter-spacing: 0.3px;
+    }
+    .badge-quality.lossless {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--accent);
+      border: 0.5px solid rgba(34, 197, 94, 0.3);
+    }
+    .badge-quality.hires {
+      background: rgba(251, 191, 36, 0.2);
+      color: var(--gold);
+      border: 0.5px solid rgba(251, 191, 36, 0.3);
+    }
+    .track-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .track-time {
+      font-size: 11.5px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .btn-track-action {
+      background: none;
+      border: none;
+      color: var(--muted);
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .btn-track-action:active { color: #fff; }
+
+    /* Filter Chips */
+    .filter-chips-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 6px 0 10px;
+      scrollbar-width: none;
+    }
+    .filter-chips-row::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      background: rgba(255, 255, 255, 0.08);
+      border: 0.5px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform 0.22s var(--spring-bounce), background 0.18s, color 0.18s;
+      will-change: transform;
+    }
+    .filter-chip:active {
+      transform: scale(0.88);
+      transition: transform 0.06s var(--tap-press);
+    }
+    .filter-chip.chip-pop {
+      animation: chipPop 0.28s var(--spring-bounce);
+    }
+    .filter-chip.active {
+      background: #ffffff;
+      color: #000000;
+      border-color: #ffffff;
+      box-shadow: 0 2px 8px rgba(255,255,255,0.25);
+    }
+
+    /* ============================================================
+       ALBUM DETAIL VIEW (Apple Music Style Layout)
+       ============================================================ */
+    .detail-view {
+      display: none;
+      padding-bottom: 50px;
+    }
+    .detail-view.active {
+      display: block;
+      opacity: 1 !important;
+      animation: iosViewPush 0.30s var(--spring-soft) forwards;
+    }
+    @keyframes iosViewPush {
+      0% { opacity: 0; transform: translateX(20px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    .detail-nav-bar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: max(12px, var(--safe-top));
+      padding-bottom: 12px;
+      padding-left: 18px;
+      padding-right: 18px;
+      margin: 0 -18px 16px;
+      background: rgba(6, 10, 20, 0.88);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border-bottom: 0.5px solid var(--border);
+    }
+    .btn-detail-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.24s var(--spring-bounce), background 0.18s;
+      will-change: transform;
+    }
+    .btn-detail-back:active {
+      transform: scale(0.88) translateX(-3px);
+      background: rgba(255, 255, 255, 0.2);
+      transition: transform 0.06s var(--tap-press);
+    }
+    .btn-detail-more {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .detail-hero-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 6px 0 20px;
+    }
+    .detail-artwork-wrap {
+      width: min(200px, 54vw);
+      height: min(200px, 54vw);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.65), 0 0 35px rgba(56, 189, 248, 0.15);
+      background: var(--navy-card);
+      margin-bottom: 16px;
+    }
+    .detail-artwork {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .detail-title {
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+      margin-bottom: 4px;
+      max-width: 90%;
+      line-height: 1.25;
+    }
+    .detail-artist {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+    .detail-meta-text {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    /* Apple Music Action Pills: Putar & Acak */
+    .detail-actions-row {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      max-width: 360px;
+      margin-bottom: 22px;
+    }
+    .btn-apple-pill {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.24s var(--spring-bounce), opacity 0.2s, box-shadow 0.24s ease;
+      will-change: transform;
+    }
+    .btn-apple-pill:active {
+      transform: scale(0.92);
+      opacity: 0.85;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+      transition: transform 0.06s var(--tap-press);
+    }
+    .btn-apple-pill.cta-pop {
+      animation: ctaPop 0.32s var(--spring-bounce);
+    }
+    .btn-apple-pill.primary {
+      background: #ffffff;
+      color: #000000;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.35);
+    }
+    .btn-apple-pill.secondary {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      border: 0.5px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+    }
+
+    /* Tracklist in Album Detail */
+    .album-tracklist {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+    }
+    .album-track-row {
+      display: flex;
+      align-items: center;
+      padding: 10px 8px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.24s var(--spring-bounce), background 0.16s ease;
+      gap: 10px;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
+      will-change: transform;
+    }
+    .album-track-row:active {
+      background: rgba(255, 255, 255, 0.14) !important;
+      transform: scale(0.972);
+      transition: transform 0.05s var(--tap-press);
+    }
+    .album-track-row.playing {
+      background: rgba(34, 197, 94, 0.12);
+    }
+    .album-track-num {
+      width: 20px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+    .album-track-row.playing .album-track-num {
+      color: var(--accent);
+    }
+    .album-track-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .album-track-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .album-track-sub {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .album-track-duration {
+      font-size: 12px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+
+    /* Offline Storage Card in Offline View */
+    .storage-banner {
+      background: linear-gradient(135deg, rgba(20, 35, 66, 0.9), rgba(12, 22, 44, 0.95));
+      border: 0.5px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+    }
+    .storage-banner-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .storage-banner-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .storage-banner-desc {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    .storage-actions-row {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-action-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 0.5px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-action-pill:active { transform: scale(0.95); }
+    .btn-action-pill.danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    /* ============================================================
+       CAPSULE MINI PLAYER
+       ============================================================ */
+    .mini-player {
+      position: fixed;
+      bottom: calc(56px + var(--safe-bottom) + 8px);
+      left: 14px;
+      right: 14px;
+      background: rgba(14, 24, 46, 0.88);
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      border: 0.5px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+      z-index: 85;
+      cursor: pointer;
+      transition: transform 0.26s var(--spring-bounce), background 0.2s, border-color 0.2s;
+      will-change: transform;
+    }
+    .mini-player:active {
+      transform: scale(0.968);
+      background: rgba(18, 32, 60, 0.98);
+      transition: transform 0.07s var(--tap-press);
+    }
+    .mini-thumb {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: var(--navy-card);
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.45);
+    }
+    .mini-info { flex: 1; min-width: 0; }
+    .mini-title {
+      font-size: 14px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+    .mini-sub {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+    .mini-btns { display: flex; align-items: center; gap: 4px; }
+    .mini-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      padding: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: transform 0.22s var(--spring-bounce), opacity 0.18s;
+      will-change: transform;
+    }
+    .mini-btn:active {
+      transform: scale(0.80);
+      opacity: 0.65;
+      transition: transform 0.06s var(--tap-press);
+    }
+    .mini-btn.cta-pop {
+      animation: ctaPop 0.32s var(--spring-bounce);
+    }
+    .mini-btn.nudge-next {
+      animation: nudgeNext 0.24s var(--spring-bounce);
+    }
+
+    /* ============================================================
+       BOTTOM NAVIGATION DOCK (5 TABS)
+       ============================================================ */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: calc(56px + var(--safe-bottom));
+      padding-bottom: var(--safe-bottom);
+      background: rgba(6, 10, 20, 0.94);
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+      backdrop-filter: blur(35px) saturate(190%);
+      -webkit-backdrop-filter: blur(35px) saturate(190%);
+    }
+    .nav-btn {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 0;
+      transition: color 0.2s, transform 0.24s var(--spring-bounce), opacity 0.2s;
+      -webkit-tap-highlight-color: transparent;
+      will-change: transform;
+    }
+    .nav-btn:active {
+      transform: scale(0.80);
+      opacity: 0.55;
+      transition: transform 0.06s var(--tap-press);
+    }
+    .nav-btn.active { color: #ffffff; }
+    .nav-btn.active svg { stroke: var(--accent); }
+    .nav-btn svg {
+      width: 21px;
+      height: 21px;
+      transition: transform 0.26s var(--spring-bounce);
+    }
+    .nav-btn.tab-pop svg {
+      animation: navTabPop 0.38s var(--spring-bounce);
+    }
+
+    /* ============================================================
+       NOW PLAYING MODAL (Apple Music Style Redesign)
+       ============================================================ */
+    .player-modal {
+      position: fixed;
+      inset: 0;
+      background: #070c18;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding-top: max(16px, var(--safe-top));
+      padding-left: 24px;
+      padding-right: 24px;
+      padding-bottom: max(34px, calc(var(--safe-bottom, 34px) + 14px));
+      transform: translateY(100%);
+      transition: transform 0.42s var(--spring);
+      overflow-y: auto;
+    }
+    .player-modal.open { transform: translateY(0); }
+    .player-modal-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 65%;
+      opacity: 0.35;
+      filter: blur(95px);
+      pointer-events: none;
+      z-index: 0;
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Grabber handle */
+    .np-grabber {
+      width: 38px;
+      height: 4.5px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      margin: 6px auto 10px;
+      cursor: pointer;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Top bar */
+    .now-playing-top {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .np-context-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+    }
+    .np-context-sub {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+    }
+    .np-context-name {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 58vw;
+      text-align: center;
+    }
+    .circle-icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 0.5px solid rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .circle-icon-btn:active { transform: scale(0.92); }
+
+    /* Center Stage: Artwork / Lyrics */
+    .np-stage {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      margin: 10px 0;
+    }
+    .squircle-artwork-wrap {
+      width: min(72vw, 300px);
+      height: min(72vw, 300px);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.75), 0 0 45px rgba(56, 189, 248, 0.2);
+      background: #111a2e;
+      position: relative;
+      transition: transform 0.45s var(--spring-bounce), box-shadow 0.45s ease, opacity 0.45s ease;
+      will-change: transform, box-shadow;
+    }
+    .squircle-artwork-wrap.paused {
+      transform: scale(0.88);
+      opacity: 0.92;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+    }
+    .squircle-artwork {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Synchronized Lyrics Container in Now Playing */
+    .np-lyrics-fullscreen {
+      display: none;
+      width: 100%;
+      height: min(72vw, 300px);
+      overflow-y: auto;
+      text-align: left;
+      padding: 10px 8px;
+      scrollbar-width: none;
+      mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    }
+    .np-lyrics-fullscreen.active { display: block; }
+    .lyric-line {
+      font-size: 20px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.35);
+      line-height: 1.45;
+      padding: 10px 4px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      filter: blur(0.3px);
+    }
+    .lyric-line.active {
+      color: #ffffff;
+      font-size: 24px;
+      font-weight: 800;
+      filter: none;
+      text-shadow: 0 0 18px rgba(255, 255, 255, 0.4);
+      transform: scale(1.02);
+      transform-origin: left center;
+    }
+
+    /* Track Meta Row */
+    .now-playing-meta {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      width: 100%;
+    }
+    .np-meta-text-col {
+      flex: 1;
+      min-width: 0;
+      padding-right: 14px;
+    }
+    .np-track-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .np-track-artist {
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.68);
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #btn-fav-now {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Apple Music Lossless / Hi-Res Audiophile Badge */
+    .apple-audio-badge-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      max-width: 100%;
+      align-self: flex-start;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border: 0.5px solid rgba(255, 255, 255, 0.15);
+      padding: 2.5px 8px;
+      border-radius: 6px;
+      margin-top: 6px;
+      cursor: pointer;
+    }
+    .apple-badge-tag {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+    .apple-badge-tag.hires { color: var(--gold); }
+    .apple-badge-spec {
+      font-size: 9.5px;
+      color: rgba(255, 255, 255, 0.6);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Scrubber Progress Bar */
+    .np-scrubber-box {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+    .np-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      outline: none;
+      cursor: pointer;
+      position: relative;
+    }
+    .np-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .np-slider:active::-webkit-slider-thumb {
+      transform: scale(1.4);
+    }
+    .np-timestamps {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 9px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.5);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Playback Controls Row (Symmetrical 5-Column Grid - 100% Dead Center Play CTA) */
+    .np-controls-row {
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1fr 1fr 68px 1fr 1fr;
+      align-items: center;
+      justify-items: center;
+      width: 100%;
+      margin-bottom: 16px;
+      padding: 0;
+    }
+    .np-icon-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .np-icon-btn:active { transform: scale(0.9); }
+    .np-icon-btn.active { color: var(--accent); }
+    .np-round-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      cursor: pointer;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s;
+    }
+    .np-round-btn:active { transform: scale(0.9); }
+    .np-play-cta {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: none;
+      color: #000000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+      transition: transform 0.24s var(--spring-bounce), box-shadow 0.24s ease;
+      will-change: transform;
+    }
+    .np-play-cta:active {
+      transform: scale(0.86);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
+      transition: transform 0.06s var(--tap-press);
+    }
+    .np-play-cta.cta-pop {
+      animation: ctaPop 0.35s var(--spring-bounce);
+    }
+    #ctrl-prev {
+      transition: transform 0.22s var(--spring-bounce), color 0.15s;
+    }
+    #ctrl-prev:active {
+      transform: scale(0.80) translateX(-6px);
+      transition: transform 0.05s var(--tap-press);
+    }
+    #ctrl-prev.nudge-prev {
+      animation: nudgePrev 0.24s var(--spring-bounce);
+    }
+    #ctrl-next {
+      transition: transform 0.22s var(--spring-bounce), color 0.15s;
+    }
+    #ctrl-next:active {
+      transform: scale(0.80) translateX(6px);
+      transition: transform 0.05s var(--tap-press);
+    }
+    #ctrl-next.nudge-next {
+      animation: nudgeNext 0.24s var(--spring-bounce);
+    }
+    #btn-fav-now.heart-pop svg, .heart-pop {
+      animation: heartPop 0.45s var(--spring-bounce);
+    }
+
+    /* Bottom Utility Row (Apple Music Signature) */
+    .np-utility-row {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding-top: 4px;
+      margin-bottom: max(6px, env(safe-area-inset-bottom, 10px));
+    }
+    .np-util-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.55);
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      border-radius: 50%;
+    }
+    .np-util-btn:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.08); }
+    .np-util-btn.active { color: var(--accent); }
+
+    /* ============================================================
+       BOTTOM SHEETS & MODALS (iOS Style)
+       ============================================================ */
+    .sheet-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 300;
+      display: flex;
+      align-items: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.28s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+    .sheet-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .sheet-modal {
+      width: 100%;
+      background: #0f1930;
+      border-top: 0.5px solid var(--border);
+      border-radius: 24px 24px 0 0;
+      padding: 16px 20px max(30px, calc(var(--safe-bottom, 34px) + 8px));
+      box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.7);
+      transform: translateY(100%);
+      transition: transform 0.36s var(--spring-bounce);
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+    .sheet-overlay.open .sheet-modal {
+      transform: translateY(0);
+    }
+    .sheet-grabber {
+      width: 36px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 999px;
+      margin: 0 auto 12px;
+    }
+    .sheet-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .sheet-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .sheet-close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .sheet-body {
+      overflow-y: auto;
+      flex: 1;
+      scrollbar-width: none;
+    }
+    .sheet-body::-webkit-scrollbar { display: none; }
+
+    /* Playlist Picker Rows with Apple Checkmark */
+    .pl-picker-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pl-picker-row:active { transform: scale(0.98); background: var(--raised); }
+    .pl-picker-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .pl-picker-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: var(--navy-card);
+      flex-shrink: 0;
+    }
+    .pl-picker-name {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pl-picker-sub {
+      font-size: 11.5px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .pl-check-circle {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .pl-check-circle.checked {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000000;
+    }
+
+    /* Equalizer Sheet UI */
+    .np-eq-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 8px 0;
+    }
+    .eq-graph-container {
+      width: 100%;
+      height: 80px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 0.5px solid var(--border);
+      overflow: hidden;
+    }
+    #eq-canvas { width: 100%; height: 100%; }
+    .eq-sliders-row {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+    }
+    .eq-slider-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      height: 140px;
+    }
+    .eq-slider-vertical {
+      -webkit-appearance: slider-vertical;
+      writing-mode: bt-lr;
+      width: 8px;
+      height: 100px;
+      accent-color: var(--accent);
+    }
+    .eq-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .preset-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .preset-pill {
+      background: rgba(255, 255, 255, 0.08);
+      border: 0.5px solid var(--border);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 9px;
+      border-radius: 10px;
+      cursor: pointer;
+      text-align: center;
+    }
+    .preset-pill.active {
+      background: var(--accent);
+      color: #000;
+      border-color: var(--accent);
+    }
+
+    /* Queue Up Next Sheet */
+    .queue-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      background: var(--surface);
+      margin-bottom: 6px;
+      cursor: pointer;
+    }
+    .queue-item.current {
+      background: rgba(34, 197, 94, 0.15);
+      border: 0.5px solid var(--accent);
+    }
+
+    /* Generic Sheet Items */
+    .sheet-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 13px 14px;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: background 0.15s;
+    }
+    .sheet-menu-item:active { background: var(--raised); }
+
+    /* Metadata details in sheet */
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 0.5px solid rgba(255, 255, 255, 0.06);
+      font-size: 13.5px;
+    }
+    .meta-lbl { color: var(--muted); }
+    .meta-val { font-weight: 700; color: #fff; text-align: right; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: calc(72px + var(--safe-bottom) + 65px);
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(14, 24, 46, 0.94);
+      backdrop-filter: blur(25px);
+      border: 0.5px solid var(--border-glow);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 400;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s var(--spring);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      white-space: nowrap;
+      max-width: 85vw;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+  </style>
+  <script src="/jpSearch.js"></script>
+</head>
+<body>
+
+  <canvas id="navy-glow"></canvas>
+
+  <header>
+    <div class="brand">
+      <img src="/icon.png" alt="Armuse Logo">
+      <h1>Armuse</h1>
+    </div>
+    <div class="header-actions">
+      <div class="status-capsule" id="status-capsule">
+        <span class="status-dot"></span>
+        <span id="status-text">Online</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-box" id="search-box">
+    <div class="search-input-wrap">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="search-input" class="search-input" placeholder="Cari lagu, artis, album, atau playlist...">
+    </div>
+  </div>
+
+  <main class="view-container">
+    <!-- VIEW 1: BERANDA (HOME) -->
+    <div id="view-home" class="view active">
+      <div class="hero-banner" id="hero-banner">
+        <div class="hero-content">
+          <span class="hero-badge">Pilihan Hari Ini</span>
+          <div class="hero-title" id="hero-title">Koleksi Musik Pilihan</div>
+          <div class="hero-sub" id="hero-sub">Audio studio resolusi tinggi</div>
+          <button class="hero-play-btn" id="hero-play-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Putar Sekarang
+          </button>
+        </div>
+        <div class="hero-thumb-wrap">
+          <img src="/icon.png" class="hero-thumb" id="hero-thumb" alt="">
+        </div>
+      </div>
+
+      <div class="home-section">
+        <div class="section-head">
+          <span class="section-title">Baru Diputar</span>
+        </div>
+        <div class="carousel-row" id="carousel-row"></div>
+      </div>
+
+      <div class="home-section">
+        <div class="section-head">
+          <span class="section-title">Artis Teratas</span>
+        </div>
+        <div class="artist-row" id="artist-row"></div>
+      </div>
+
+      <div class="home-section">
+        <div class="section-head">
+          <span class="section-title">Album Pilihan</span>
+          <span class="section-link" id="link-see-all-albums">Lihat Semua</span>
+        </div>
+        <div class="album-grid" id="home-album-grid"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: SEMUA LAGU (TRACKS) -->
+    <div id="view-tracks" class="view">
+      <div class="filter-chips-row" id="filter-chips-box">
+        <button class="filter-chip active" data-sort="default">Default</button>
+        <button class="filter-chip" data-sort="az">A — Z</button>
+        <button class="filter-chip" data-sort="artist">Artis</button>
+        <button class="filter-chip" data-sort="popular">Paling Sering</button>
+        <button class="filter-chip" data-sort="hires">Lossless / Hi-Res</button>
+      </div>
+
+      <div class="section-head">
+        <span class="section-title">Semua Lagu</span>
+        <span class="section-link" id="track-count">0 lagu</span>
+      </div>
+      <div class="track-list" id="track-list"></div>
+    </div>
+
+    <!-- VIEW 3: KOLEKSI ALBUM (ALBUMS) -->
+    <div id="view-albums" class="view">
+      <div class="section-head">
+        <span class="section-title">Koleksi Album</span>
+        <span class="section-link" id="albums-total-count">0 album</span>
+      </div>
+      <div class="album-grid" id="all-albums-grid"></div>
+    </div>
+
+    <!-- VIEW 4: PLAYLIST -->
+    <div id="view-playlists" class="view">
+      <div class="section-head">
+        <span class="section-title">Playlist Saya</span>
+        <button class="btn-action-pill" id="btn-create-pl-view" style="font-size:12px; padding:6px 12px;">+ Buat Playlist</button>
+      </div>
+      <div class="album-grid" id="playlist-grid"></div>
+    </div>
+
+    <!-- VIEW 5: LAGU TERSIMPAN (OFFLINE STORAGE) -->
+    <div id="view-offline" class="view">
+      <div class="storage-banner">
+        <div class="storage-banner-top">
+          <div>
+            <div class="storage-banner-title">Penyimpanan Offline HP</div>
+            <div class="storage-banner-desc" id="offline-storage-desc">0 Lagu · 0 MB di HP (siap putar tanpa Wi-Fi)</div>
+          </div>
+        </div>
+        <div class="storage-actions-row">
+          <button class="btn-action-pill" id="btn-dl-all-fav">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Unduh Semua Favorit
+          </button>
+          <button class="btn-action-pill danger" id="btn-clear-all-offline">
+            Hapus Semua
+          </button>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <span class="section-title">Lagu Tersimpan di HP</span>
+        <span class="section-link" id="offline-track-count">0 lagu</span>
+      </div>
+      <div class="track-list" id="offline-track-list"></div>
+    </div>
+
+    <!-- VIEW 6: TAMPILAN DALAM ALBUM (ALBUM DETAIL - APPLE MUSIC STYLE) -->
+    <div id="view-album-detail" class="detail-view">
+      <div class="detail-nav-bar">
+        <button class="btn-detail-back" id="btn-album-back">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Kembali
+        </button>
+        <button class="btn-detail-more" id="btn-album-more" aria-label="Opsi Album">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg>
+        </button>
+      </div>
+
+      <div class="detail-hero-section">
+        <div class="detail-artwork-wrap">
+          <img src="/icon.png" class="detail-artwork" id="album-detail-art" alt="">
+        </div>
+        <div class="detail-title" id="album-detail-title">Judul Album</div>
+        <div class="detail-artist" id="album-detail-artist">Nama Artis</div>
+        <div class="detail-meta-text" id="album-detail-meta">Album · Lossless · 10 Lagu, 42 Menit</div>
+
+        <!-- Apple Music Dual Action Pills: Putar & Acak -->
+        <div class="detail-actions-row">
+          <button class="btn-apple-pill primary" id="btn-album-play">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Putar
+          </button>
+          <button class="btn-apple-pill secondary" id="btn-album-shuffle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+            Acak
+          </button>
+        </div>
+
+        <!-- Tracklist inside Album -->
+        <div class="album-tracklist" id="album-tracklist"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 7: TAMPILAN DALAM PLAYLIST (PLAYLIST DETAIL - APPLE MUSIC STYLE) -->
+    <div id="view-playlist-detail" class="detail-view">
+      <div class="detail-nav-bar">
+        <button class="btn-detail-back" id="btn-playlist-back">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Kembali
+        </button>
+        <button class="btn-detail-more" id="btn-playlist-more" aria-label="Opsi Playlist">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg>
+        </button>
+      </div>
+
+      <div class="detail-hero-section">
+        <div class="detail-artwork-wrap">
+          <img src="/icon.png" class="detail-artwork" id="playlist-detail-art" alt="">
+        </div>
+        <div class="detail-title" id="playlist-detail-title">Nama Playlist</div>
+        <div class="detail-artist" id="playlist-detail-author">Playlist Anda</div>
+        <div class="detail-meta-text" id="playlist-detail-meta">0 Lagu · Armuse Pustaka</div>
+
+        <div class="detail-actions-row">
+          <button class="btn-apple-pill primary" id="btn-playlist-play">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Putar
+          </button>
+          <button class="btn-apple-pill secondary" id="btn-playlist-shuffle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+            Acak
+          </button>
+        </div>
+
+        <div class="album-tracklist" id="playlist-tracklist"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- CAPSULE MINI-PLAYER -->
+  <div class="mini-player" id="mini-player" style="display:none;">
+    <img src="/icon.png" class="mini-thumb" id="mini-thumb" alt="">
+    <div class="mini-info">
+      <div class="mini-title" id="mini-title">Judul Lagu</div>
+      <div class="mini-sub">
+        <span id="mini-badge"></span>
+        <span id="mini-artist">Nama Artis</span>
+      </div>
+    </div>
+    <div class="mini-btns">
+      <button class="mini-btn" id="mini-btn-play" aria-label="Putar">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+      <button class="mini-btn" id="mini-btn-next" aria-label="Berikutnya">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION DOCK (5 TABS) -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-tab="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Beranda
+    </button>
+    <button class="nav-btn" data-tab="tracks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      Lagu
+    </button>
+    <button class="nav-btn" data-tab="albums">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="3"/></svg>
+      Album
+    </button>
+    <button class="nav-btn" data-tab="playlists">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Playlist
+    </button>
+    <button class="nav-btn" data-tab="offline">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12l4 4 4-4"/></svg>
+      Tersimpan
+    </button>
+  </nav>
+
+  <!-- ============================================================
+       NOW PLAYING MODAL (Apple Music Style Redesign)
+       ============================================================ -->
+  <div class="player-modal" id="player-modal">
+    <div class="player-modal-backdrop" id="player-backdrop"></div>
+    <div class="np-grabber" id="btn-grabber-player"></div>
+
+    <!-- Top Action Bar (Apple Music Centered Header) -->
+    <div class="now-playing-top">
+      <button class="circle-icon-btn" id="btn-close-player" aria-label="Tutup">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+
+      <div class="np-context-col">
+        <span class="np-context-sub" id="np-context-sub">MEMUTAR DARI ALBUM</span>
+        <span class="np-context-name" id="np-context-title">Nama Album</span>
+      </div>
+
+      <button class="circle-icon-btn" id="btn-np-more" title="Pilihan Lainnya" aria-label="Pilihan Lainnya">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/><circle cx="5" cy="12" r="1.5"/></svg>
+      </button>
+    </div>
+
+    <!-- Center Stage: Squircle Artwork OR Synchronized Lyrics View -->
+    <div class="np-stage">
+      <div class="squircle-artwork-wrap" id="player-cover-wrap">
+        <img src="/icon.png" class="squircle-artwork" id="player-cover" alt="">
+      </div>
+
+      <!-- Live Synchronized Lyrics overlay when toggled -->
+      <div class="np-lyrics-fullscreen" id="player-lyrics-view">
+        <div id="lyrics-lines-container">
+          <div class="lyric-line">Memuat lirik lagu...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Track Metadata & Audiophile Badge -->
+    <div class="now-playing-meta">
+      <div class="np-meta-text-col">
+        <div class="np-track-title" id="player-title">Judul Lagu</div>
+        <div class="np-track-artist" id="player-artist">Nama Artis</div>
+
+        <!-- Apple Music Lossless / Hi-Res Audiophile Badge -->
+        <div class="apple-audio-badge-box" id="apple-audio-badge" title="Rincian Audio">
+          <span class="apple-badge-tag" id="badge-tier-tag">LOSSLESS</span>
+          <span class="apple-badge-spec" id="badge-spec-text">24-bit / 96.0 kHz · FLAC</span>
+        </div>
+      </div>
+
+      <!-- Favorite Heart button with smooth pop -->
+      <button class="circle-icon-btn" id="btn-fav-now" aria-label="Favorit">
+        <svg class="fav-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+    </div>
+
+    <!-- Scrubber Progress Bar -->
+    <div class="np-scrubber-box">
+      <input type="range" class="np-slider" id="player-slider" value="0" min="0" max="100" step="0.1">
+      <div class="np-timestamps">
+        <span id="player-curr-time">0:00</span>
+        <span id="player-total-time">-0:00</span>
+      </div>
+    </div>
+
+    <!-- Playback Controls Row -->
+    <div class="np-controls-row">
+      <button class="np-icon-btn" id="ctrl-shuffle" title="Acak">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+      </button>
+
+      <button class="np-round-btn" id="ctrl-prev" title="Sebelumnya">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2.5"/></svg>
+      </button>
+
+      <button class="np-play-cta" id="ctrl-play" title="Putar / Jeda">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 3px;"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+      </button>
+
+      <button class="np-round-btn" id="ctrl-next" title="Berikutnya">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2.5"/></svg>
+      </button>
+
+      <button class="np-icon-btn" id="ctrl-repeat" title="Ulangi">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+      </button>
+    </div>
+
+    <!-- Apple Music Signature Bottom Utility Row -->
+    <div class="np-utility-row">
+      <!-- 1. Lirik Sinkron Toggle -->
+      <button class="np-util-btn" id="btn-util-lyrics" title="Lirik Lagu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </button>
+
+      <!-- 2. Tambah ke Playlist -->
+      <button class="np-util-btn" id="btn-util-addpl" title="Tambah ke Playlist">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/><line x1="19" y1="15" x2="19" y2="21"/><line x1="16" y1="18" x2="22" y2="18"/></svg>
+      </button>
+
+      <!-- 3. Equalizer DSP -->
+      <button class="np-util-btn" id="btn-util-eq" title="Equalizer Audio">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><circle cx="4" cy="12" r="2.2" fill="currentColor"/><circle cx="12" cy="10" r="2.2" fill="currentColor"/><circle cx="20" cy="14" r="2.2" fill="currentColor"/></svg>
+      </button>
+
+      <!-- 4. Antrean / Queue Up Next -->
+      <button class="np-util-btn" id="btn-util-queue" title="Antrean Lagu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="4" cy="6" r="1.5"/><circle cx="4" cy="12" r="1.5"/><circle cx="4" cy="18" r="1.5"/></svg>
+      </button>
+
+      <!-- 5. Unduh / Simpan ke HP -->
+      <button class="np-util-btn" id="btn-util-save" title="Simpan ke HP">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BOTTOM SHEET 1: TAMBAH KE PLAYLIST (APPLE MUSIC STYLE)
+       ============================================================ -->
+  <div class="sheet-overlay" id="sheet-pl-picker">
+    <div class="sheet-modal">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-head">
+        <div class="sheet-title">Tambah ke Playlist</div>
+        <button class="sheet-close-btn" id="btn-close-pl-picker">✕</button>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <button class="btn-action-pill" id="btn-picker-new-pl" style="width:100%; padding:10px 14px; font-size:13.5px; border-radius:12px;">
+          + Playlist Baru
+        </button>
+      </div>
+
+      <div class="sheet-body" id="picker-pl-list"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BOTTOM SHEET 2: EQUALIZER (DSP)
+       ============================================================ -->
+  <div class="sheet-overlay" id="sheet-eq">
+    <div class="sheet-modal">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-head">
+        <div class="sheet-title">Equalizer Audio (5-Band)</div>
+        <button class="sheet-close-btn" id="btn-close-eq">✕</button>
+      </div>
+
+      <div class="sheet-body">
+        <div class="np-eq-card">
+          <div class="eq-graph-container">
+            <canvas id="eq-canvas"></canvas>
+          </div>
+          <div class="eq-sliders-row">
+            <div class="eq-slider-col">
+              <input type="range" class="eq-slider-vertical" min="-12" max="12" value="0" step="1" data-band="0">
+              <span class="eq-label">60Hz</span>
+            </div>
+            <div class="eq-slider-col">
+              <input type="range" class="eq-slider-vertical" min="-12" max="12" value="0" step="1" data-band="1">
+              <span class="eq-label">230Hz</span>
+            </div>
+            <div class="eq-slider-col">
+              <input type="range" class="eq-slider-vertical" min="-12" max="12" value="0" step="1" data-band="2">
+              <span class="eq-label">910Hz</span>
+            </div>
+            <div class="eq-slider-col">
+              <input type="range" class="eq-slider-vertical" min="-12" max="12" value="0" step="1" data-band="3">
+              <span class="eq-label">3.6kHz</span>
+            </div>
+            <div class="eq-slider-col">
+              <input type="range" class="eq-slider-vertical" min="-12" max="12" value="0" step="1" data-band="4">
+              <span class="eq-label">14kHz</span>
+            </div>
+          </div>
+          <div class="preset-row">
+            <button class="preset-pill active" data-preset="flat">Flat</button>
+            <button class="preset-pill" data-preset="bass">Bass</button>
+            <button class="preset-pill" data-preset="treble">Treble</button>
+            <button class="preset-pill" data-preset="vocal">Vokal</button>
+            <button class="preset-pill" data-preset="acoustic">Akustik</button>
+            <button class="preset-pill" data-preset="electronic">Elektronik</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BOTTOM SHEET 3: ANTREAN LAGU (UP NEXT QUEUE)
+       ============================================================ -->
+  <div class="sheet-overlay" id="sheet-queue">
+    <div class="sheet-modal">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-head">
+        <div class="sheet-title">Antrean Berikutnya</div>
+        <button class="sheet-close-btn" id="btn-close-queue">✕</button>
+      </div>
+      <div class="sheet-body" id="queue-list-container"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BOTTOM SHEET 4: OPSI LAINNYA LAGU (ACTION SHEET)
+       ============================================================ -->
+  <div class="sheet-overlay" id="sheet-track-options">
+    <div class="sheet-modal">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-head">
+        <div class="sheet-title" id="opt-sheet-song-title">Pilihan Lagu</div>
+        <button class="sheet-close-btn" id="btn-close-options">✕</button>
+      </div>
+      <div class="sheet-body">
+        <button class="sheet-menu-item" id="act-opt-addpl">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Tambah ke Playlist
+        </button>
+        <button class="sheet-menu-item" id="act-opt-save">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span id="act-opt-save-txt">Simpan ke HP (Offline)</span>
+        </button>
+        <button class="sheet-menu-item" id="act-opt-meta">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          Lihat Rincian Format Audio &amp; Metadata
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BOTTOM SHEET 5: DETAIL METADATA & AUDIO
+       ============================================================ -->
+  <div class="sheet-overlay" id="sheet-meta">
+    <div class="sheet-modal">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-head">
+        <div class="sheet-title">Rincian Audio &amp; Metadata</div>
+        <button class="sheet-close-btn" id="btn-close-meta">✕</button>
+      </div>
+      <div class="sheet-body">
+        <div class="meta-row"><span class="meta-lbl">Judul</span><span class="meta-val" id="meta-val-title">-</span></div>
+        <div class="meta-row"><span class="meta-lbl">Artis</span><span class="meta-val" id="meta-val-artist">-</span></div>
+        <div class="meta-row"><span class="meta-lbl">Album</span><span class="meta-val" id="meta-val-album">-</span></div>
+        <div class="meta-row"><span class="meta-lbl">Kualitas Audio</span><span class="meta-val" id="meta-val-quality">-</span></div>
+        <div class="meta-row"><span class="meta-lbl">Codec &amp; Bitrate</span><span class="meta-val" id="meta-val-codec">-</span></div>
+        <div class="meta-row"><span class="meta-lbl">Sample Rate</span><span class="meta-val" id="meta-val-sample">-</span></div>
+        <div class="meta-row"><span class="meta-lbl">Bit Depth</span><span class="meta-val" id="meta-val-bits">-</span></div>
+        <div class="meta-row"><span class="meta-lbl">Total Diputar</span><span class="meta-val" id="meta-val-plays">0 kali</span></div>
+        <div class="meta-row"><span class="meta-lbl">Status HP</span><span class="meta-val" id="meta-val-storage" style="color:var(--accent);">Streaming Online</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BOTTOM SHEET 6: PENGATUR WAKTU TIDUR (SLEEP TIMER)
+       ============================================================ -->
+  <div class="sheet-overlay" id="sheet-sleep">
+    <div class="sheet-modal">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-head">
+        <div class="sheet-title">Pengatur Waktu Tidur (Sleep Timer)</div>
+        <button class="sheet-close-btn" id="btn-close-sleep">✕</button>
+      </div>
+      <div class="sheet-body">
+        <div style="font-size:13px; color:var(--muted); margin-bottom:14px;">Musik akan mengecil perlahan (*fade out*) saat waktu habis.</div>
+        <div class="preset-row" style="grid-template-columns: repeat(4, 1fr); margin-bottom:16px;">
+          <button class="preset-pill" data-sleep="15">15m</button>
+          <button class="preset-pill" data-sleep="30">30m</button>
+          <button class="preset-pill" data-sleep="45">45m</button>
+          <button class="preset-pill" data-sleep="60">60m</button>
+        </div>
+        <div id="sleep-timer-status" style="font-size:13px; color:var(--accent); font-weight:700; text-align:center; margin-bottom:14px;">Timer nonaktif</div>
+        <button class="sheet-menu-item" id="btn-cancel-sleep" style="justify-content:center; color:#f87171;">Matikan Timer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BOTTOM SHEET 7: YOUTUBE DOWNLOADER
+       ============================================================ -->
+  <div class="sheet-overlay" id="sheet-ytdl">
+    <div class="sheet-modal">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-head">
+        <div class="sheet-title">Unduh dari YouTube ke Pustaka</div>
+        <button class="sheet-close-btn" id="btn-close-ytdl">✕</button>
+      </div>
+      <div class="sheet-body">
+        <div style="font-size:13px; color:var(--muted); margin-bottom:12px;">Tempel link YouTube, lagu akan diunduh langsung ke komputer dan masuk ke pustaka.</div>
+        <input type="url" id="ytdl-url" class="search-input" placeholder="https://youtube.com/watch?v=..." style="margin-bottom:12px;">
+        <div class="preset-row" style="margin-bottom:14px;">
+          <button class="preset-pill active ytdl-pill" data-fmt="mp3">MP3 320k</button>
+          <button class="preset-pill ytdl-pill" data-fmt="m4a">M4A AAC</button>
+          <button class="preset-pill ytdl-pill" data-fmt="flac">FLAC Lossless</button>
+        </div>
+        <button class="btn-action-pill" id="btn-start-dl" style="width:100%; padding:12px; font-size:14px; background:#fff; color:#000;">
+          Unduh &amp; Simpan ke Pustaka
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       BOTTOM SHEET 8: MODAL BUAT PLAYLIST BARU
+       ============================================================ -->
+  <div class="sheet-overlay" id="sheet-new-pl">
+    <div class="sheet-modal">
+      <div class="sheet-grabber"></div>
+      <div class="sheet-head">
+        <div class="sheet-title">Buat Playlist Baru</div>
+        <button class="sheet-close-btn" id="btn-close-new-pl">✕</button>
+      </div>
+      <div class="sheet-body">
+        <input type="text" id="new-pl-name" class="search-input" placeholder="Nama playlist baru..." style="margin-bottom:14px;">
+        <button class="btn-action-pill" id="btn-submit-new-pl" style="width:100%; padding:12px; font-size:14px; background:#fff; color:#000;">
+          Buat Playlist
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Notifikasi</div>
+  <audio id="audio" preload="auto" playsinline webkit-playsinline></audio>
+
+  <script>
+
+    'use strict';
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+
+    let allTracks = [];
+    let filteredTracks = [];
+    let currentQueue = [];
+    let albumsMap = new Map();
+    let artistsMap = new Map();
+    let playlistsList = [];
+    let currentTrack = null;
+    let currentIndex = -1;
+    let isShuffle = false;
+    let repeatMode = 'off'; // 'off' | 'all' | 'one'
+    let currentSort = 'default';
+    let previousActiveTab = 'home';
+    let activeDetailView = null; // 'album' | 'playlist' | null
+    let selectedTrackForOptions = null;
+    let isLyricsMode = false;
+
+    let offlineTrackIds = new Set();
+    let offlineAudioUrls = new Map();
+
+    let currentLyricsData = null;
+    let parsedLrc = [];
+    let activeLyricIndex = -1;
+
+    let sleepTimerId = null;
+    let sleepRemainingSec = 0;
+
+    // Web Audio Equalizer DSP
+    let audioCtx = null;
+    let mediaSource = null;
+    let analyserNode = null;
+    let eqFilters = [];
+    const EQ_FREQS = [60, 230, 910, 3600, 14000];
+    const EQ_GAINS = [0, 0, 0, 0, 0];
+    const EQ_PRESETS = {
+      flat: [0, 0, 0, 0, 0],
+      bass: [6, 4, 1, 0, -1],
+      treble: [-1, 0, 1, 4, 6],
+      vocal: [-2, 1, 5, 3, 1],
+      acoustic: [3, 2, 1, 2, 4],
+      electronic: [5, 3, -1, 2, 5],
+    };
+
+    const audio = document.getElementById('audio');
+    const toastEl = document.getElementById('toast');
+
+    function toast(msg, ms = 2200) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      setTimeout(() => toastEl.classList.remove('show'), ms);
+    }
+
+    function formatTime(sec) {
+      sec = Math.max(0, Math.floor(sec || 0));
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    function heartSvg(isFav, size = 20) {
+      if (isFav) {
+        return `<svg class="fav-svg active" width="${size}" height="${size}" viewBox="0 0 24 24" fill="#fa243c" stroke="#fa243c" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+      }
+      return `<svg class="fav-svg" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+    }
+
+    function renderQualityBadge(q) {
+      if (!q) return '';
+      if (q.hires) return '<span class="badge-quality hires">HI-RES</span>';
+      if (q.lossless) return '<span class="badge-quality lossless">LOSSLESS</span>';
+      return `<span class="badge-quality">${(q.codec || 'MP3').toUpperCase()}</span>`;
+    }
+
+    /* ============================================================
+       INDEXEDDB OFFLINE STORAGE
+       ============================================================ */
+    const DB_NAME = 'ArmuseOfflineDB';
+    const DB_VERSION = 1;
+    let dbInstance = null;
+
+    function openOfflineDB() {
+      return new Promise((resolve, reject) => {
+        if (dbInstance) return resolve(dbInstance);
+        const req = indexedDB.open(DB_NAME, DB_VERSION);
+        req.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains('tracks')) db.createObjectStore('tracks', { keyPath: 'id' });
+          if (!db.objectStoreNames.contains('audio')) db.createObjectStore('audio', { keyPath: 'id' });
+          if (!db.objectStoreNames.contains('covers')) db.createObjectStore('covers', { keyPath: 'id' });
+        };
+        req.onsuccess = (e) => {
+          dbInstance = e.target.result;
+          resolve(dbInstance);
+        };
+        req.onerror = () => reject(req.error);
+      });
+    }
+
+    async function loadOfflineIndex() {
+      try {
+        const db = await openOfflineDB();
+        const tx = db.transaction('tracks', 'readonly');
+        const req = tx.objectStore('tracks').getAll();
+        req.onsuccess = () => {
+          const list = req.result || [];
+          offlineTrackIds = new Set(list.map(t => t.id));
+          updateOfflineUI();
+        };
+      } catch (_) {}
+    }
+
+    async function saveTrackOffline(track) {
+      if (!track) return;
+      toast(`Mengunduh "${track.title}" ke HP...`, 3000);
+      try {
+        const audioRes = await fetch(`/api/stream/${track.id}`);
+        const audioBlob = await audioRes.blob();
+
+        let coverBlob = null;
+        if (track.hasCover) {
+          try {
+            const coverRes = await fetch(`/api/cover/${track.id}`);
+            coverBlob = await coverRes.blob();
+          } catch (_) {}
+        }
+
+        const db = await openOfflineDB();
+        const tx = db.transaction(['tracks', 'audio', 'covers'], 'readwrite');
+        tx.objectStore('tracks').put(track);
+        tx.objectStore('audio').put({ id: track.id, blob: audioBlob, size: audioBlob.size });
+        if (coverBlob) tx.objectStore('covers').put({ id: track.id, blob: coverBlob });
+
+        await new Promise((res, rej) => {
+          tx.oncomplete = res;
+          tx.onerror = rej;
+        });
+
+        offlineTrackIds.add(track.id);
+        updateOfflineUI();
+        renderTracks();
+        renderOfflineTracks();
+        updateNowPlayingStorageBtn();
+        toast(`✓ Berhasil disimpan di HP: ${track.title}`);
+      } catch (err) {
+        toast(`Gagal menyimpan ke HP: ${err.message}`);
+      }
+    }
+
+    async function removeTrackOffline(trackId) {
+      try {
+        const db = await openOfflineDB();
+        const tx = db.transaction(['tracks', 'audio', 'covers'], 'readwrite');
+        tx.objectStore('tracks').delete(trackId);
+        tx.objectStore('audio').delete(trackId);
+        tx.objectStore('covers').delete(trackId);
+        await new Promise(res => { tx.oncomplete = res; });
+
+        offlineTrackIds.delete(trackId);
+        if (offlineAudioUrls.has(trackId)) {
+          URL.revokeObjectURL(offlineAudioUrls.get(trackId));
+          offlineAudioUrls.delete(trackId);
+        }
+        updateOfflineUI();
+        renderTracks();
+        renderOfflineTracks();
+        updateNowPlayingStorageBtn();
+        toast('Lagu dihapus dari HP');
+      } catch (_) {}
+    }
+
+    async function getOfflineAudio(trackId) {
+      try {
+        if (offlineAudioUrls.has(trackId)) return offlineAudioUrls.get(trackId);
+        const db = await openOfflineDB();
+        const tx = db.transaction('audio', 'readonly');
+        const req = tx.objectStore('audio').get(trackId);
+        return await new Promise((resolve) => {
+          req.onsuccess = () => {
+            if (req.result && req.result.blob) {
+              const url = URL.createObjectURL(req.result.blob);
+              offlineAudioUrls.set(trackId, url);
+              resolve(url);
+            } else {
+              resolve(null);
+            }
+          };
+          req.onerror = () => resolve(null);
+        });
+      } catch (_) {
+        return null;
+      }
+    }
+
+    async function updateOfflineUI() {
+      const count = offlineTrackIds.size;
+      const countEl = document.getElementById('offline-track-count');
+      if (countEl) countEl.textContent = `${count} lagu`;
+
+      try {
+        const db = await openOfflineDB();
+        const tx = db.transaction('audio', 'readonly');
+        const req = tx.objectStore('audio').getAll();
+        req.onsuccess = () => {
+          let totalBytes = 0;
+          (req.result || []).forEach(item => { totalBytes += (item.size || 0); });
+          const mb = (totalBytes / (1024 * 1024)).toFixed(1);
+          const descEl = document.getElementById('offline-storage-desc');
+          if (descEl) descEl.textContent = `${count} Lagu · ${mb} MB di HP (siap putar tanpa Wi-Fi)`;
+        };
+      } catch (_) {}
+    }
+
+    /* Ambient Deep Navy Glow Canvas */
+    const glowCanvas = document.getElementById('navy-glow');
+    const glowCtx = glowCanvas ? glowCanvas.getContext('2d') : null;
+    let glowStep = 0;
+
+    function resizeGlow() {
+      if (!glowCanvas) return;
+      glowCanvas.width = window.innerWidth / 4;
+      glowCanvas.height = window.innerHeight / 4;
+    }
+    window.addEventListener('resize', resizeGlow);
+    resizeGlow();
+
+    function renderNavyGlow() {
+      if (!glowCanvas || !glowCtx) return;
+      glowStep += 0.012;
+      const w = glowCanvas.width, h = glowCanvas.height;
+      glowCtx.clearRect(0, 0, w, h);
+
+      const x1 = w * 0.35 + Math.sin(glowStep) * (w * 0.15);
+      const y1 = h * 0.35 + Math.cos(glowStep * 0.8) * (h * 0.15);
+      const rad1 = glowCtx.createRadialGradient(x1, y1, 10, x1, y1, w * 0.55);
+      rad1.addColorStop(0, 'rgba(10, 26, 58, 0.85)');
+      rad1.addColorStop(1, 'transparent');
+      glowCtx.fillStyle = rad1;
+      glowCtx.fillRect(0, 0, w, h);
+
+      const x2 = w * 0.65 - Math.cos(glowStep * 0.9) * (w * 0.15);
+      const y2 = h * 0.65 - Math.sin(glowStep * 0.7) * (h * 0.15);
+      const rad2 = glowCtx.createRadialGradient(x2, y2, 10, x2, y2, w * 0.5);
+      rad2.addColorStop(0, 'rgba(6, 16, 38, 0.75)');
+      rad2.addColorStop(1, 'transparent');
+      glowCtx.fillStyle = rad2;
+      glowCtx.fillRect(0, 0, w, h);
+
+      requestAnimationFrame(renderNavyGlow);
+    }
+    requestAnimationFrame(renderNavyGlow);
+
+    /* Equalizer Canvas Graph */
+    const eqCanvas = document.getElementById('eq-canvas');
+    const eqCtx = eqCanvas ? eqCanvas.getContext('2d') : null;
+
+    function resizeEqCanvas() {
+      if (!eqCanvas) return;
+      eqCanvas.width = eqCanvas.clientWidth * window.devicePixelRatio;
+      eqCanvas.height = eqCanvas.clientHeight * window.devicePixelRatio;
+    }
+    window.addEventListener('resize', resizeEqCanvas);
+    setTimeout(resizeEqCanvas, 200);
+
+    // Ensure HTML5 <audio> stays on the native hardware pipeline for background audio and pitch stability
+    audio.preservesPitch = true;
+    audio.playbackRate = 1.0;
+
+    /* Micro-Interaction & Dynamic Animation Engine */
+    function haptic(ms = 8) {
+      if (navigator.vibrate) {
+        try { navigator.vibrate(ms); } catch (e) {}
+      }
+    }
+
+    function triggerPop(el, className = 'cta-pop', duration = 350) {
+      if (!el) return;
+      el.classList.remove(className);
+      void el.offsetWidth; // Force reflow to cleanly re-trigger CSS keyframe
+      el.classList.add(className);
+      setTimeout(() => { if (el) el.classList.remove(className); }, duration);
+    }
+
+    function initWebAudio() {
+      // Intentionally bypassed to preserve iOS Safari background audio and avoid pitch distortion / skipping on resume
+      return;
+    }
+
+    function renderEqGraph() {
+      if (!eqCanvas || !eqCtx) return;
+      const w = eqCanvas.width, h = eqCanvas.height;
+      if (!w || !h) { requestAnimationFrame(renderEqGraph); return; }
+
+      eqCtx.clearRect(0, 0, w, h);
+
+      eqCtx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+      eqCtx.lineWidth = 1;
+      eqCtx.beginPath();
+      eqCtx.moveTo(0, h / 2);
+      eqCtx.lineTo(w, h / 2);
+      eqCtx.stroke();
+
+      eqCtx.beginPath();
+      const points = [];
+      const numBands = EQ_GAINS.length;
+      for (let i = 0; i < numBands; i++) {
+        const x = (w / (numBands + 1)) * (i + 1);
+        const normGain = EQ_GAINS[i] / 12;
+        const y = h / 2 - (normGain * (h * 0.4));
+        points.push({ x, y });
+      }
+
+      eqCtx.moveTo(0, h / 2);
+      if (points.length) {
+        eqCtx.lineTo(points[0].x, points[0].y);
+        for (let i = 0; i < points.length - 1; i++) {
+          const xc = (points[i].x + points[i + 1].x) / 2;
+          const yc = (points[i].y + points[i + 1].y) / 2;
+          eqCtx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+        }
+        eqCtx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+        eqCtx.lineTo(w, h / 2);
+      }
+
+      eqCtx.strokeStyle = '#22c55e';
+      eqCtx.lineWidth = 2.5 * window.devicePixelRatio;
+      eqCtx.stroke();
+
+      points.forEach(p => {
+        eqCtx.fillStyle = '#ffffff';
+        eqCtx.beginPath();
+        eqCtx.arc(p.x, p.y, 4 * window.devicePixelRatio, 0, Math.PI * 2);
+        eqCtx.fill();
+      });
+
+      requestAnimationFrame(renderEqGraph);
+    }
+    requestAnimationFrame(renderEqGraph);
+
+    /* ============================================================
+       DATA FETCHING & LIBRARY INDEXING
+       ============================================================ */
+    async function checkStatus() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        const cap = document.getElementById('status-capsule');
+        const txt = document.getElementById('status-text');
+        if (data.ok) {
+          cap.classList.remove('offline');
+          txt.textContent = 'Online';
+        } else {
+          cap.classList.add('offline');
+          txt.textContent = 'Offline';
+        }
+      } catch (_) {
+        const cap = document.getElementById('status-capsule');
+        const txt = document.getElementById('status-text');
+        if (cap && txt) {
+          cap.classList.add('offline');
+          txt.textContent = 'Offline';
+        }
+      }
+    }
+
+    async function loadTracks() {
+      try {
+        const res = await fetch('/api/tracks');
+        const data = await res.json();
+        if (data.ok) {
+          allTracks = data.tracks;
+          filteredTracks = [...allTracks];
+          currentQueue = [...allTracks];
+          buildLibraryIndexes();
+          applyFilter();
+        }
+      } catch (_) {
+        // Fallback to offline storage if server unreachable
+        const db = await openOfflineDB();
+        const tx = db.transaction('tracks', 'readonly');
+        const req = tx.objectStore('tracks').getAll();
+        req.onsuccess = () => {
+          allTracks = req.result || [];
+          filteredTracks = [...allTracks];
+          currentQueue = [...allTracks];
+          buildLibraryIndexes();
+          applyFilter();
+        };
+      }
+    }
+
+    async function loadPlaylists() {
+      try {
+        const res = await fetch('/api/playlists');
+        const data = await res.json();
+        if (data.ok) {
+          playlistsList = data.playlists;
+          renderPlaylists();
+        }
+      } catch (_) {}
+    }
+
+    function buildLibraryIndexes() {
+      albumsMap = new Map();
+      artistsMap = new Map();
+
+      allTracks.forEach(t => {
+        const albumName = t.album || 'Tanpa Album';
+        if (!albumsMap.has(albumName)) {
+          albumsMap.set(albumName, {
+            name: albumName,
+            artist: t.artist || 'Artis Beragam',
+            hasCover: t.hasCover,
+            coverId: t.id,
+            tracks: [],
+          });
+        }
+        albumsMap.get(albumName).tracks.push(t);
+
+        const artistName = t.artist || 'Artis Musik';
+        if (!artistsMap.has(artistName)) {
+          artistsMap.set(artistName, {
+            name: artistName,
+            coverId: t.id,
+            hasCover: t.hasCover,
+            tracks: [],
+          });
+        }
+        artistsMap.get(artistName).tracks.push(t);
+      });
+
+      renderHeroBanner();
+      renderCarouselAlbums();
+      renderArtistsRow();
+      renderHomeAlbumGrid();
+      renderAllAlbumsGrid();
+    }
+
+    function renderHeroBanner() {
+      const albums = Array.from(albumsMap.values());
+      if (!albums.length) return;
+      const alb = albums[0];
+      const titleEl = document.getElementById('hero-title');
+      const subEl = document.getElementById('hero-sub');
+      const thumbEl = document.getElementById('hero-thumb');
+      if (titleEl) titleEl.textContent = alb.name;
+      if (subEl) subEl.textContent = `${alb.artist} · ${alb.tracks.length} lagu`;
+      if (thumbEl && alb.hasCover) thumbEl.src = `/api/cover/${alb.coverId}`;
+
+      const playBtn = document.getElementById('hero-play-btn');
+      if (playBtn) {
+        playBtn.onclick = () => {
+          if (alb.tracks.length) playTrackInQueue(alb.tracks, 0);
+        };
+      }
+    }
+
+    function renderCarouselAlbums() {
+      const row = document.getElementById('carousel-row');
+      if (!row) return;
+      const albums = Array.from(albumsMap.values()).slice(0, 10);
+      row.innerHTML = albums.map(a => `
+        <div class="carousel-card" data-album="${encodeURIComponent(a.name)}">
+          <div class="carousel-thumb-wrap">
+            ${a.hasCover
+              ? `<img src="/api/cover/${a.coverId}" class="carousel-thumb" loading="lazy" alt="">`
+              : `<div class="track-thumb-fallback">${(a.name[0] || 'A').toUpperCase()}</div>`
+            }
+          </div>
+          <div class="carousel-title">${a.name}</div>
+          <div class="carousel-sub">${a.artist}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderArtistsRow() {
+      const row = document.getElementById('artist-row');
+      if (!row) return;
+      const artists = Array.from(artistsMap.values()).slice(0, 10);
+      row.innerHTML = artists.map(art => `
+        <div class="artist-item" data-artist="${encodeURIComponent(art.name)}">
+          ${art.hasCover 
+            ? `<img src="/api/cover/${art.coverId}" class="artist-avatar" loading="lazy" alt="">`
+            : `<div class="artist-avatar" style="display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px;">${(art.name[0] || 'A').toUpperCase()}</div>`
+          }
+          <div class="artist-name">${art.name}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderHomeAlbumGrid() {
+      const grid = document.getElementById('home-album-grid');
+      if (!grid) return;
+      const albums = Array.from(albumsMap.values()).slice(0, 6);
+      grid.innerHTML = albums.map(a => renderAlbumCardHtml(a)).join('');
+    }
+
+    function renderAllAlbumsGrid() {
+      const grid = document.getElementById('all-albums-grid');
+      const countEl = document.getElementById('albums-total-count');
+      if (!grid) return;
+      const rawQ = (document.getElementById('search-input') ? document.getElementById('search-input').value.trim() : '');
+      let albums = Array.from(albumsMap.values());
+      if (rawQ) {
+        albums = albums.filter(a => {
+          if (window.JPSearch) {
+            return window.JPSearch.test({ title: a.name, artist: a.artist }, rawQ);
+          }
+          if (window.jpSearch) {
+            return window.jpSearch.test({ title: a.name, artist: a.artist }, rawQ);
+          }
+          const q = rawQ.toLowerCase();
+          return (a.name && a.name.toLowerCase().includes(q)) || (a.artist && a.artist.toLowerCase().includes(q));
+        });
+      }
+      if (countEl) countEl.textContent = `${albums.length} album`;
+
+      if (!albums.length) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--muted);">Tidak ada album ditemukan.</div>`;
+        return;
+      }
+      grid.innerHTML = albums.map(a => renderAlbumCardHtml(a)).join('');
+    }
+
+    function renderAlbumCardHtml(a) {
+      return `
+        <div class="album-card" data-album="${encodeURIComponent(a.name)}">
+          <div class="album-art-wrap">
+            ${a.hasCover 
+              ? `<img src="/api/cover/${a.coverId}" class="album-art" loading="lazy" alt="">`
+              : `<div class="track-thumb-fallback">${(a.name[0] || 'A').toUpperCase()}</div>`
+            }
+          </div>
+          <div class="album-meta-box">
+            <div class="album-name">${a.name}</div>
+            <div class="album-artist">${a.artist} · ${a.tracks.length} lagu</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPlaylists() {
+      const grid = document.getElementById('playlist-grid');
+      if (!grid) return;
+      if (!playlistsList.length) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--muted);">Belum ada playlist dibuat.</div>`;
+        return;
+      }
+      grid.innerHTML = playlistsList.map(pl => `
+        <div class="album-card" data-playlist="${pl.id}">
+          <div class="album-art-wrap">
+            ${pl.hasCustomCover
+              ? `<img src="/api/playlist-cover/${pl.id}" class="album-art" loading="lazy" alt="">`
+              : (pl.coverTrackId
+                  ? `<img src="/api/cover/${pl.coverTrackId}" class="album-art" loading="lazy" alt="">`
+                  : `<div class="track-thumb-fallback">${(pl.name[0] || 'P').toUpperCase()}</div>`
+                )
+            }
+          </div>
+          <div class="album-meta-box">
+            <div class="album-name">${pl.name}</div>
+            <div class="album-artist">${pl.count} lagu</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function applyFilter() {
+      const rawQ = document.getElementById('search-input').value.trim();
+      const q = rawQ.toLowerCase();
+      filteredTracks = allTracks.filter(t => {
+        if (!rawQ) return true;
+        if (window.JPSearch) {
+          return window.JPSearch.test(t, rawQ);
+        }
+        return (t.title && t.title.toLowerCase().includes(q)) ||
+               (t.artist && t.artist.toLowerCase().includes(q)) ||
+               (t.album && t.album.toLowerCase().includes(q));
+      });
+
+      if (currentSort === 'az') {
+        filteredTracks.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+      } else if (currentSort === 'artist') {
+        filteredTracks.sort((a, b) => (a.artist || '').localeCompare(b.artist || ''));
+      } else if (currentSort === 'popular') {
+        filteredTracks.sort((a, b) => (b.playCount || 0) - (a.playCount || 0));
+      } else if (currentSort === 'hires') {
+        filteredTracks = filteredTracks.filter(t => t.quality && (t.quality.hires || t.quality.lossless));
+      }
+
+      renderTracks();
+      const albumsView = document.getElementById('view-albums');
+      if (albumsView && albumsView.classList.contains('active')) {
+        renderAllAlbumsGrid();
+      }
+    }
+
+    function renderTracks() {
+      const container = document.getElementById('track-list');
+      const countEl = document.getElementById('track-count');
+      if (countEl) countEl.textContent = `${filteredTracks.length} lagu`;
+      if (!container) return;
+
+      if (!filteredTracks.length) {
+        container.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--muted);">Tidak ada lagu yang cocok.</div>`;
+        return;
+      }
+
+      container.innerHTML = filteredTracks.map((t, idx) => {
+        const isCurrent = currentTrack && currentTrack.id === t.id;
+        return `
+          <div class="track-item ${isCurrent ? 'playing' : ''}" data-idx="${idx}">
+            ${t.hasCover 
+              ? `<img src="/api/cover/${t.id}" class="track-thumb" loading="lazy" alt="">`
+              : `<div class="track-thumb-fallback track-thumb" style="font-size:16px;">${(t.title[0] || 'M').toUpperCase()}</div>`
+            }
+            <div class="track-info">
+              <div class="track-title">${t.title}</div>
+              <div class="track-sub">
+                ${renderQualityBadge(t.quality)}
+                <span>${t.artist}</span>
+              </div>
+            </div>
+            <div class="track-actions">
+              <span class="track-time">${formatTime(t.duration)}</span>
+              <button class="btn-track-action" data-more="${t.id}" aria-label="Pilihan">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderOfflineTracks() {
+      const container = document.getElementById('offline-track-list');
+      if (!container) return;
+      const offTracks = allTracks.filter(t => offlineTrackIds.has(t.id));
+
+      if (!offTracks.length) {
+        container.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--muted);">Belum ada lagu yang tersimpan di HP.</div>`;
+        return;
+      }
+
+      container.innerHTML = offTracks.map((t, idx) => {
+        const isCurrent = currentTrack && currentTrack.id === t.id;
+        return `
+          <div class="track-item ${isCurrent ? 'playing' : ''}" data-off-id="${t.id}">
+            ${t.hasCover 
+              ? `<img src="/api/cover/${t.id}" class="track-thumb" loading="lazy" alt="">`
+              : `<div class="track-thumb-fallback track-thumb" style="font-size:16px;">${(t.title[0] || 'M').toUpperCase()}</div>`
+            }
+            <div class="track-info">
+              <div class="track-title">${t.title}</div>
+              <div class="track-sub">
+                <span class="badge-quality lossless">OFFLINE</span>
+                <span>${t.artist}</span>
+              </div>
+            </div>
+            <div class="track-actions">
+              <span class="track-time">${formatTime(t.duration)}</span>
+              <button class="btn-track-action" data-remove-off="${t.id}" title="Hapus dari HP" aria-label="Hapus dari HP">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ============================================================
+       APPLE MUSIC STYLE DETAIL VIEWS (ALBUM & PLAYLIST)
+       ============================================================ */
+    function openAlbumDetail(albumName) {
+      const alb = albumsMap.get(albumName);
+      if (!alb) return;
+
+      activeDetailView = 'album';
+      document.body.classList.add('detail-mode');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.detail-view').forEach(v => v.classList.remove('active'));
+
+      const detailView = document.getElementById('view-album-detail');
+      detailView.classList.add('active');
+
+      document.getElementById('album-detail-title').textContent = alb.name;
+      document.getElementById('album-detail-artist').textContent = alb.artist;
+
+      let totalSec = 0;
+      alb.tracks.forEach(t => { totalSec += (t.duration || 0); });
+      const totalMin = Math.round(totalSec / 60);
+      document.getElementById('album-detail-meta').textContent = `Album · ${alb.tracks.length} Lagu, ${totalMin} Menit`;
+
+      const artEl = document.getElementById('album-detail-art');
+      if (alb.hasCover) artEl.src = `/api/cover/${alb.coverId}`;
+      else artEl.src = '/icon.png';
+
+      // Render Tracklist with clean numeric index
+      const listEl = document.getElementById('album-tracklist');
+      listEl.innerHTML = alb.tracks.map((t, idx) => {
+        const isCurrent = currentTrack && currentTrack.id === t.id;
+        return `
+          <div class="album-track-row ${isCurrent ? 'playing' : ''}" data-alb-idx="${idx}">
+            <div class="album-track-num">${isCurrent ? '▶' : (idx + 1)}</div>
+            <div class="album-track-info">
+              <div class="album-track-title">${t.title}</div>
+              <div class="album-track-sub">
+                ${renderQualityBadge(t.quality)}
+                <span>${t.artist}</span>
+              </div>
+            </div>
+            <div class="album-track-duration">${formatTime(t.duration)}</div>
+            <button class="btn-track-action" data-more="${t.id}" aria-label="Opsi">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      // Play & Shuffle buttons
+      document.getElementById('btn-album-play').onclick = () => {
+        if (alb.tracks.length) playTrackInQueue(alb.tracks, 0);
+      };
+      document.getElementById('btn-album-shuffle').onclick = () => {
+        if (alb.tracks.length) {
+          isShuffle = true;
+          document.getElementById('ctrl-shuffle').classList.add('active');
+          const randIdx = Math.floor(Math.random() * alb.tracks.length);
+          playTrackInQueue(alb.tracks, randIdx);
+        }
+      };
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openPlaylistDetail(playlistId) {
+      const pl = playlistsList.find(p => p.id === playlistId);
+      if (!pl) return;
+
+      activeDetailView = 'playlist';
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.detail-view').forEach(v => v.classList.remove('active'));
+
+      const detailView = document.getElementById('view-playlist-detail');
+      detailView.classList.add('active');
+
+      document.getElementById('playlist-detail-title').textContent = pl.name;
+      document.getElementById('playlist-detail-author').textContent = 'Playlist Armuse';
+      document.getElementById('playlist-detail-meta').textContent = `${pl.count} Lagu · Dibuat di Pustaka`;
+
+      const artEl = document.getElementById('playlist-detail-art');
+      if (pl.hasCustomCover) artEl.src = `/api/playlist-cover/${pl.id}`;
+      else if (pl.coverTrackId) artEl.src = `/api/cover/${pl.coverTrackId}`;
+      else artEl.src = '/icon.png';
+
+      const plTrackIds = new Set(pl.trackIds || []);
+      const plTracks = allTracks.filter(t => plTrackIds.has(t.id));
+
+      const listEl = document.getElementById('playlist-tracklist');
+      if (!plTracks.length) {
+        listEl.innerHTML = `<div style="text-align:center; padding: 40px; color: var(--muted);">Belum ada lagu di playlist ini.</div>`;
+      } else {
+        listEl.innerHTML = plTracks.map((t, idx) => {
+          const isCurrent = currentTrack && currentTrack.id === t.id;
+          return `
+            <div class="album-track-row ${isCurrent ? 'playing' : ''}" data-pl-idx="${idx}">
+              <div class="album-track-num">${isCurrent ? '▶' : (idx + 1)}</div>
+              <div class="album-track-info">
+                <div class="album-track-title">${t.title}</div>
+                <div class="album-track-sub">
+                  ${renderQualityBadge(t.quality)}
+                  <span>${t.artist}</span>
+                </div>
+              </div>
+              <div class="album-track-duration">${formatTime(t.duration)}</div>
+              <button class="btn-track-action" data-more="${t.id}" aria-label="Opsi">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('btn-playlist-play').onclick = () => {
+        if (plTracks.length) playTrackInQueue(plTracks, 0);
+      };
+      document.getElementById('btn-playlist-shuffle').onclick = () => {
+        if (plTracks.length) {
+          isShuffle = true;
+          document.getElementById('ctrl-shuffle').classList.add('active');
+          const randIdx = Math.floor(Math.random() * plTracks.length);
+          playTrackInQueue(plTracks, randIdx);
+        }
+      };
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeDetailView() {
+      activeDetailView = null;
+      document.body.classList.remove('detail-mode');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      document.querySelectorAll('.detail-view').forEach(v => v.classList.remove('active'));
+      const activeTabEl = document.getElementById(`view-${previousActiveTab}`);
+      if (activeTabEl) activeTabEl.classList.add('active');
+    }
+
+    document.getElementById('btn-album-back').onclick = closeDetailView;
+    document.getElementById('btn-playlist-back').onclick = closeDetailView;
+
+    /* ============================================================
+       AUDIO PLAYBACK & NOW PLAYING ENGINE
+       ============================================================ */
+    async function playTrackInQueue(queue, index) {
+      currentQueue = queue;
+      currentIndex = index;
+      if (currentQueue[currentIndex]) {
+        await playTrack(currentQueue[currentIndex]);
+      }
+    }
+
+    async function playTrack(t) {
+      if (!t) return;
+      currentTrack = t;
+
+      initWebAudio();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      const offlineBlobUrl = await getOfflineAudio(t.id);
+      if (offlineBlobUrl) {
+        audio.src = offlineBlobUrl;
+        toast('Memutar dari memori HP (Offline)');
+      } else {
+        audio.src = `/api/stream/${t.id}`;
+      }
+
+      audio.play().catch(e => console.log('Autoplay:', e));
+
+      updateMiniPlayer();
+      updateNowPlayingModal();
+      setupMediaSession();
+      renderTracks();
+      if (activeDetailView === 'album') openAlbumDetail(t.album);
+      loadTrackLyrics(t.id);
+
+      if (navigator.vibrate) navigator.vibrate(8);
+
+      fetch('/api/stats/play', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: t.id }),
+      }).catch(() => {});
+    }
+
+    function togglePlay() {
+      initWebAudio();
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+
+      haptic(14);
+      triggerPop(document.getElementById('ctrl-play'), 'cta-pop', 350);
+      triggerPop(document.getElementById('mini-btn-play'), 'cta-pop', 320);
+
+      if (audio.paused) {
+        if (!currentTrack && currentQueue.length) playTrack(currentQueue[0]);
+        else audio.play();
+      } else {
+        audio.pause();
+      }
+    }
+
+    function playNext() {
+      if (!currentQueue.length) return;
+      haptic(10);
+      triggerPop(document.getElementById('ctrl-next'), 'nudge-next', 240);
+      triggerPop(document.getElementById('mini-btn-next'), 'nudge-next', 240);
+
+      if (repeatMode === 'one' && currentTrack) {
+        audio.currentTime = 0;
+        audio.play();
+        return;
+      }
+      let nextIdx = currentIndex + 1;
+      if (isShuffle) {
+        nextIdx = Math.floor(Math.random() * currentQueue.length);
+      } else if (nextIdx >= currentQueue.length) {
+        nextIdx = repeatMode === 'all' ? 0 : -1;
+      }
+      if (nextIdx >= 0 && nextIdx < currentQueue.length) {
+        currentIndex = nextIdx;
+        playTrack(currentQueue[nextIdx]);
+      }
+    }
+
+    function playPrev() {
+      if (!currentQueue.length) return;
+      haptic(10);
+      triggerPop(document.getElementById('ctrl-prev'), 'nudge-prev', 240);
+
+      if (audio.currentTime > 3) {
+        audio.currentTime = 0;
+        return;
+      }
+      let prevIdx = currentIndex - 1;
+      if (prevIdx < 0) prevIdx = currentQueue.length - 1;
+      currentIndex = prevIdx;
+      playTrack(currentQueue[prevIdx]);
+    }
+
+    function updateMiniPlayer() {
+      const mp = document.getElementById('mini-player');
+      if (!currentTrack) {
+        mp.style.display = 'none';
+        return;
+      }
+      mp.style.display = 'flex';
+      document.getElementById('mini-title').textContent = currentTrack.title;
+      document.getElementById('mini-artist').textContent = currentTrack.artist;
+      document.getElementById('mini-thumb').src = currentTrack.hasCover ? `/api/cover/${currentTrack.id}` : '/icon.png';
+      document.getElementById('mini-badge').innerHTML = renderQualityBadge(currentTrack.quality);
+      updatePlayIcons();
+    }
+
+    function updateNowPlayingModal() {
+      if (!currentTrack) return;
+      document.getElementById('player-title').textContent = currentTrack.title;
+      document.getElementById('player-artist').textContent = currentTrack.artist;
+      const coverSrc = currentTrack.hasCover ? `/api/cover/${currentTrack.id}` : '/icon.png';
+      document.getElementById('player-cover').src = coverSrc;
+      document.getElementById('player-backdrop').style.backgroundImage = `url("${coverSrc}")`;
+      document.getElementById('btn-fav-now').innerHTML = heartSvg(currentTrack.fav, 22);
+
+      const ctxSub = document.getElementById('np-context-sub');
+      const ctxTitle = document.getElementById('np-context-title');
+      if (currentTrack.album) {
+        if (ctxSub) ctxSub.textContent = 'MEMUTAR DARI ALBUM';
+        if (ctxTitle) ctxTitle.textContent = currentTrack.album;
+      } else {
+        if (ctxSub) ctxSub.textContent = 'MEMUTAR DARI';
+        if (ctxTitle) ctxTitle.textContent = 'Pustaka Lagu';
+      }
+
+      // Apple Music Audiophile Badge
+      const q = currentTrack.quality || {};
+      const tagEl = document.getElementById('badge-tier-tag');
+      const specEl = document.getElementById('badge-spec-text');
+
+      if (q.hires) {
+        tagEl.textContent = 'HI-RES LOSSLESS';
+        tagEl.className = 'apple-badge-tag hires';
+        specEl.textContent = `${q.bitDepth || 24}-bit / ${(q.sampleRate ? q.sampleRate/1000 : 96).toFixed(1)} kHz · ${q.codec || 'FLAC'}`;
+      } else if (q.lossless) {
+        tagEl.textContent = 'LOSSLESS';
+        tagEl.className = 'apple-badge-tag';
+        specEl.textContent = `${q.bitDepth || 16}-bit / ${(q.sampleRate ? q.sampleRate/1000 : 44.1).toFixed(1)} kHz · ${q.codec || 'ALAC'}`;
+      } else {
+        tagEl.textContent = (q.codec || 'MP3').toUpperCase();
+        tagEl.className = 'apple-badge-tag';
+        specEl.textContent = `${q.detail || '320 kbps'} · Audio Terkompresi`;
+      }
+
+      // Metadata Sheet Update
+      document.getElementById('meta-val-title').textContent = currentTrack.title || '-';
+      document.getElementById('meta-val-artist').textContent = currentTrack.artist || '-';
+      document.getElementById('meta-val-album').textContent = currentTrack.album || '-';
+      document.getElementById('meta-val-quality').textContent = q.hires ? 'Hi-Res Lossless Master' : (q.lossless ? 'Lossless Audio' : 'High Quality Lossy');
+      document.getElementById('meta-val-codec').textContent = `${q.codec || 'Audio'} (${q.detail || '-'})`;
+      document.getElementById('meta-val-sample').textContent = q.sampleRate ? `${(q.sampleRate/1000).toFixed(1)} kHz` : '-';
+      document.getElementById('meta-val-bits').textContent = q.bitDepth ? `${q.bitDepth}-bit` : '-';
+      document.getElementById('meta-val-plays').textContent = `${currentTrack.playCount || 0} kali`;
+      const isSaved = offlineTrackIds.has(currentTrack.id);
+      document.getElementById('meta-val-storage').textContent = isSaved ? '✓ Tersimpan di HP' : 'Streaming Online';
+      document.getElementById('meta-val-storage').style.color = isSaved ? 'var(--accent)' : 'var(--muted)';
+
+      updateNowPlayingStorageBtn();
+      updatePlayIcons();
+    }
+
+    function updateNowPlayingStorageBtn() {
+      if (!currentTrack) return;
+      const isSaved = offlineTrackIds.has(currentTrack.id);
+      const btn = document.getElementById('btn-util-save');
+      const actOptTxt = document.getElementById('act-opt-save-txt');
+
+      if (isSaved) {
+        btn.classList.add('active');
+        btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+        if (actOptTxt) actOptTxt.textContent = 'Hapus dari Penyimpanan HP';
+      } else {
+        btn.classList.remove('active');
+        btn.innerHTML = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+        if (actOptTxt) actOptTxt.textContent = 'Simpan ke HP (Offline)';
+      }
+    }
+
+    function updatePlayIcons() {
+      const isPaused = audio.paused;
+      const playSvg = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+      const pauseSvg = '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1.5"/><rect x="14" y="4" width="4" height="16" rx="1.5"/></svg>';
+      const bigPlaySvg = '<svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" style="margin-left: 3px;"><polygon points="6 4 20 12 6 20 6 4"/></svg>';
+      const bigPauseSvg = '<svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1.5"/><rect x="14" y="4" width="4" height="16" rx="1.5"/></svg>';
+
+      const miniPlayBtn = document.getElementById('mini-btn-play');
+      if (miniPlayBtn) miniPlayBtn.innerHTML = isPaused ? playSvg : pauseSvg;
+
+      const ctrlPlayBtn = document.getElementById('ctrl-play');
+      if (ctrlPlayBtn) ctrlPlayBtn.innerHTML = isPaused ? bigPlaySvg : bigPauseSvg;
+
+      const coverWrap = document.getElementById('player-cover-wrap');
+      if (coverWrap) {
+        if (isPaused) coverWrap.classList.add('paused');
+        else coverWrap.classList.remove('paused');
+      }
+    }
+
+    /* Synchronized LRC Lyrics Parser */
+    function parseLrc(text) {
+      if (!text) return [];
+      const lines = [];
+      text.split(/\r?\n/).forEach(raw => {
+        const m = /^\[(\d+):(\d+(?:\.\d+)?)\](.*)$/.exec(raw.trim());
+        if (m) {
+          const t = (+m[1]) * 60 + parseFloat(m[2]);
+          const txt = m[3].trim();
+          if (txt) lines.push({ t, text: txt });
+        }
+      });
+      return lines.sort((a, b) => a.t - b.t);
+    }
+
+    async function loadTrackLyrics(trackId) {
+      currentLyricsData = null;
+      parsedLrc = [];
+      activeLyricIndex = -1;
+
+      const container = document.getElementById('lyrics-lines-container');
+      if (container) container.innerHTML = '<div class="lyric-line">Mencari lirik lagu...</div>';
+
+      try {
+        const res = await fetch(`/api/lyrics/${trackId}`);
+        const data = await res.json();
+        if (data.found) {
+          currentLyricsData = data;
+          let lrcText = data.synced || '';
+          if (!lrcText && data.manual && data.byLang) {
+            const firstLang = Object.values(data.byLang)[0];
+            lrcText = (firstLang && firstLang.synced) || '';
+          }
+          if (lrcText) {
+            parsedLrc = parseLrc(lrcText);
+            renderLyricsLines();
+            return;
+          }
+        }
+        if (container) container.innerHTML = '<div class="lyric-line" style="color:var(--muted);">Lirik belum tersedia untuk lagu ini.</div>';
+      } catch (_) {
+        if (container) container.innerHTML = '<div class="lyric-line" style="color:var(--muted);">Gagal memuat lirik.</div>';
+      }
+    }
+
+    function renderLyricsLines() {
+      const container = document.getElementById('lyrics-lines-container');
+      if (!container || !parsedLrc.length) return;
+      container.innerHTML = parsedLrc.map((item, idx) => `
+        <div class="lyric-line" data-lrc-idx="${idx}">${item.text}</div>
+      `).join('');
+    }
+
+    function syncLyrics(currTime) {
+      if (!parsedLrc.length) return;
+      let targetIdx = -1;
+      for (let i = 0; i < parsedLrc.length; i++) {
+        if (currTime >= parsedLrc[i].t) targetIdx = i;
+        else break;
+      }
+      if (targetIdx !== activeLyricIndex && targetIdx !== -1) {
+        activeLyricIndex = targetIdx;
+        const container = document.getElementById('lyrics-lines-container');
+        if (!container) return;
+        const allLineEls = container.querySelectorAll('.lyric-line');
+        allLineEls.forEach((el, idx) => {
+          if (idx === targetIdx) el.classList.add('active');
+          else el.classList.remove('active');
+        });
+
+        // Smooth auto-scroll to active line in center
+        const activeEl = allLineEls[targetIdx];
+        if (activeEl) {
+          activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }
+
+    /* MediaSession for iOS Safari Lock Screen / Dynamic Island */
+    function setupMediaSession() {
+      if (!('mediaSession' in navigator) || !currentTrack) return;
+      const coverUrl = currentTrack.hasCover ? `${window.location.origin}/api/cover/${currentTrack.id}` : `${window.location.origin}/icon.png`;
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: currentTrack.title,
+        artist: currentTrack.artist,
+        album: currentTrack.album || 'Armuse',
+        artwork: [
+          { src: coverUrl, sizes: '512x512', type: 'image/jpeg' },
+          { src: coverUrl, sizes: '192x192', type: 'image/jpeg' }
+        ]
+      });
+
+      navigator.mediaSession.setActionHandler('play', togglePlay);
+      navigator.mediaSession.setActionHandler('pause', togglePlay);
+      navigator.mediaSession.setActionHandler('previoustrack', playPrev);
+      navigator.mediaSession.setActionHandler('nexttrack', playNext);
+      navigator.mediaSession.setActionHandler('seekto', (details) => {
+        if (details.seekTime) audio.currentTime = details.seekTime;
+      });
+    }
+
+    /* Audio Event Listeners */
+    audio.addEventListener('play', () => {
+      updatePlayIcons();
+      if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
+    });
+    audio.addEventListener('pause', () => {
+      updatePlayIcons();
+      if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
+    });
+    audio.addEventListener('ended', playNext);
+
+    const playerSlider = document.getElementById('player-slider');
+    let isSeeking = false;
+    audio.addEventListener('timeupdate', () => {
+      const cur = audio.currentTime || 0;
+      const dur = audio.duration || 0;
+      if (!isSeeking && dur > 0) {
+        playerSlider.value = (cur / dur) * 100;
+        document.getElementById('player-curr-time').textContent = formatTime(cur);
+        document.getElementById('player-total-time').textContent = `-${formatTime(dur - cur)}`;
+      }
+      syncLyrics(cur);
+    });
+
+    playerSlider.addEventListener('input', () => {
+      isSeeking = true;
+      const dur = audio.duration || 0;
+      const targetSec = (playerSlider.value / 100) * dur;
+      document.getElementById('player-curr-time').textContent = formatTime(targetSec);
+    });
+    playerSlider.addEventListener('change', () => {
+      const dur = audio.duration || 0;
+      const targetSec = (playerSlider.value / 100) * dur;
+      audio.currentTime = targetSec;
+      isSeeking = false;
+    });
+
+    /* ============================================================
+       PLAYLIST PICKER SHEET (DESKTOP PARITY ON MOBILE)
+       ============================================================ */
+    function openPlaylistPicker(trackId) {
+      const targetId = trackId || (currentTrack ? currentTrack.id : null);
+      if (!targetId) {
+        toast('Pilih lagu terlebih dahulu');
+        return;
+      }
+      selectedTrackForOptions = allTracks.find(t => t.id === targetId) || currentTrack;
+
+      const listContainer = document.getElementById('picker-pl-list');
+      if (!playlistsList.length) {
+        listContainer.innerHTML = `<div style="text-align:center; padding: 24px; color: var(--muted);">Belum ada playlist. Buat playlist baru di atas.</div>`;
+      } else {
+        listContainer.innerHTML = playlistsList.map(pl => {
+          const trackSet = new Set(pl.trackIds || []);
+          const isChecked = trackSet.has(selectedTrackForOptions.id);
+          return `
+            <div class="pl-picker-row" data-pl-id="${pl.id}">
+              <div class="pl-picker-info">
+                ${pl.hasCustomCover 
+                  ? `<img src="/api/playlist-cover/${pl.id}" class="pl-picker-thumb" alt="">`
+                  : (pl.coverTrackId 
+                      ? `<img src="/api/cover/${pl.coverTrackId}" class="pl-picker-thumb" alt="">`
+                      : `<div class="track-thumb-fallback pl-picker-thumb" style="font-size:14px;">${(pl.name[0] || 'P').toUpperCase()}</div>`
+                    )
+                }
+                <div>
+                  <div class="pl-picker-name">${pl.name}</div>
+                  <div class="pl-picker-sub">${(pl.trackIds || []).length} lagu</div>
+                </div>
+              </div>
+              <div class="pl-check-circle ${isChecked ? 'checked' : ''}">
+                ${isChecked ? '✓' : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      document.getElementById('sheet-pl-picker').classList.add('open');
+    }
+
+    document.getElementById('picker-pl-list').addEventListener('click', async (e) => {
+      const row = e.target.closest('.pl-picker-row');
+      if (!row || !selectedTrackForOptions) return;
+      const plId = row.dataset.plId;
+      const pl = playlistsList.find(p => p.id === plId);
+      if (!pl) return;
+
+      const trackSet = new Set(pl.trackIds || []);
+      const isAlreadyIn = trackSet.has(selectedTrackForOptions.id);
+
+      if (isAlreadyIn) {
+        // Remove from playlist
+        try {
+          const res = await fetch('/api/playlist/remove', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ playlistId: plId, trackId: selectedTrackForOptions.id }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            pl.trackIds = pl.trackIds.filter(id => id !== selectedTrackForOptions.id);
+            toast(`Dihapus dari "${pl.name}"`);
+            openPlaylistPicker(selectedTrackForOptions.id);
+            renderPlaylists();
+          }
+        } catch (_) {}
+      } else {
+        // Add to playlist
+        try {
+          const res = await fetch('/api/playlist/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ playlistId: plId, trackId: selectedTrackForOptions.id }),
+          });
+          const data = await res.json();
+          if (data.ok) {
+            if (!pl.trackIds) pl.trackIds = [];
+            pl.trackIds.push(selectedTrackForOptions.id);
+            toast(`✓ Ditambahkan ke "${pl.name}"`);
+            openPlaylistPicker(selectedTrackForOptions.id);
+            renderPlaylists();
+          }
+        } catch (_) {}
+      }
+    });
+
+    document.getElementById('btn-close-pl-picker').onclick = () => {
+      document.getElementById('sheet-pl-picker').classList.remove('open');
+    };
+
+    document.getElementById('btn-picker-new-pl').onclick = () => {
+      document.getElementById('sheet-pl-picker').classList.remove('open');
+      document.getElementById('sheet-new-pl').classList.add('open');
+    };
+    document.getElementById('btn-create-pl-view').onclick = () => {
+      document.getElementById('sheet-new-pl').classList.add('open');
+    };
+    document.getElementById('btn-close-new-pl').onclick = () => {
+      document.getElementById('sheet-new-pl').classList.remove('open');
+    };
+
+    document.getElementById('btn-submit-new-pl').onclick = async () => {
+      const input = document.getElementById('new-pl-name');
+      const name = input.value.trim();
+      if (!name) return;
+      const initialTrackId = selectedTrackForOptions ? selectedTrackForOptions.id : null;
+
+      try {
+        const res = await fetch('/api/playlist/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, trackId: initialTrackId }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          playlistsList.push(data.playlist);
+          input.value = '';
+          document.getElementById('sheet-new-pl').classList.remove('open');
+          toast(`Playlist "${data.playlist.name}" dibuat`);
+          renderPlaylists();
+          if (initialTrackId) openPlaylistPicker(initialTrackId);
+        }
+      } catch (err) {
+        toast(`Gagal membuat playlist: ${err.message}`);
+      }
+    };
+
+    /* Up Next Queue Sheet */
+    function openQueueSheet() {
+      const container = document.getElementById('queue-list-container');
+      if (!container) return;
+      if (!currentQueue.length) {
+        container.innerHTML = `<div style="text-align:center; padding: 24px; color: var(--muted);">Antrean kosong.</div>`;
+      } else {
+        container.innerHTML = currentQueue.map((t, idx) => `
+          <div class="queue-item ${currentIndex === idx ? 'current' : ''}" data-q-idx="${idx}">
+            <div style="font-size:12px; font-weight:700; width:22px; color:var(--muted);">${idx + 1}</div>
+            <div style="flex:1; min-width:0;">
+              <div style="font-size:13.5px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${t.title}</div>
+              <div style="font-size:11.5px; color:var(--muted);">${t.artist}</div>
+            </div>
+            <span style="font-size:11.5px; color:var(--muted);">${formatTime(t.duration)}</span>
+          </div>
+        `).join('');
+      }
+      document.getElementById('sheet-queue').classList.add('open');
+    }
+
+    document.getElementById('queue-list-container').addEventListener('click', (e) => {
+      const item = e.target.closest('[data-q-idx]');
+      if (item) {
+        const qIdx = parseInt(item.dataset.qIdx, 10);
+        currentIndex = qIdx;
+        playTrack(currentQueue[qIdx]);
+        document.getElementById('sheet-queue').classList.remove('open');
+      }
+    });
+    document.getElementById('btn-close-queue').onclick = () => {
+      document.getElementById('sheet-queue').classList.remove('open');
+    };
+
+    /* Equalizer Sheet */
+    document.getElementById('btn-util-eq').onclick = () => {
+      document.getElementById('sheet-eq').classList.add('open');
+      setTimeout(resizeEqCanvas, 200);
+    };
+    document.getElementById('btn-close-eq').onclick = () => {
+      document.getElementById('sheet-eq').classList.remove('open');
+    };
+
+    document.querySelectorAll('.eq-slider-vertical').forEach(slider => {
+      slider.addEventListener('input', () => {
+        const band = parseInt(slider.dataset.band, 10);
+        const val = parseFloat(slider.value);
+        EQ_GAINS[band] = val;
+        if (eqFilters[band]) eqFilters[band].gain.value = val;
+      });
+    });
+
+    document.querySelectorAll('[data-preset]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-preset]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const p = EQ_PRESETS[btn.dataset.preset];
+        if (p) {
+          p.forEach((gain, i) => {
+            EQ_GAINS[i] = gain;
+            if (eqFilters[i]) eqFilters[i].gain.value = gain;
+            const sl = document.querySelector(`.eq-slider-vertical[data-band="${i}"]`);
+            if (sl) sl.value = gain;
+          });
+        }
+      });
+    });
+
+    /* Metadata Sheet */
+    document.getElementById('apple-audio-badge').onclick = () => {
+      document.getElementById('sheet-meta').classList.add('open');
+    };
+    document.getElementById('btn-close-meta').onclick = () => {
+      document.getElementById('sheet-meta').classList.remove('open');
+    };
+
+    /* Sleep Timer Sheet */
+    const bSleep = document.getElementById('btn-header-sleep'); if (bSleep) bSleep.onclick = () => {
+      document.getElementById('sheet-sleep').classList.add('open');
+    };
+    document.getElementById('btn-close-sleep').onclick = () => {
+      document.getElementById('sheet-sleep').classList.remove('open');
+    };
+
+    document.querySelectorAll('[data-sleep]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mins = parseInt(btn.dataset.sleep, 10);
+        if (sleepTimerId) clearInterval(sleepTimerId);
+        sleepRemainingSec = mins * 60;
+        document.getElementById('sleep-timer-status').textContent = `Aktif: ${mins} menit`;
+        toast(`Waktu tidur disetel: ${mins} menit`);
+
+        sleepTimerId = setInterval(() => {
+          sleepRemainingSec--;
+          if (sleepRemainingSec <= 5 && sleepRemainingSec > 0) {
+            audio.volume = Math.max(0, audio.volume - 0.2);
+          }
+          if (sleepRemainingSec <= 0) {
+            clearInterval(sleepTimerId);
+            sleepTimerId = null;
+            audio.pause();
+            audio.volume = 1;
+            document.getElementById('sleep-timer-status').textContent = 'Timer nonaktif';
+            toast('Waktu tidur selesai: Musik dijeda.');
+          }
+        }, 1000);
+      });
+    });
+
+    document.getElementById('btn-cancel-sleep').onclick = () => {
+      if (sleepTimerId) clearInterval(sleepTimerId);
+      sleepTimerId = null;
+      document.getElementById('sleep-timer-status').textContent = 'Timer nonaktif';
+      toast('Timer tidur dimatikan');
+    };
+
+    /* YouTube Downloader Sheet */
+    let selectedDlFormat = 'mp3';
+    const bYtdl = document.getElementById('btn-header-ytdl'); if (bYtdl) bYtdl.onclick = () => {
+      document.getElementById('sheet-ytdl').classList.add('open');
+    };
+    document.getElementById('btn-close-ytdl').onclick = () => {
+      document.getElementById('sheet-ytdl').classList.remove('open');
+    };
+
+    document.querySelectorAll('.ytdl-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.ytdl-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        selectedDlFormat = pill.dataset.fmt;
+      });
+    });
+
+    document.getElementById('btn-start-dl').addEventListener('click', async () => {
+      const input = document.getElementById('ytdl-url');
+      const u = input.value.trim();
+      if (!u) {
+        toast('Tempel link YouTube terlebih dahulu');
+        return;
+      }
+      toast('Memulai proses unduh di komputer...');
+      try {
+        const res = await fetch('/api/ytdl/download', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: u, format: selectedDlFormat }),
+        });
+        const data = await res.json();
+        if (data.ok) {
+          toast(`Mengunduh: ${data.title}`);
+          input.value = '';
+          document.getElementById('sheet-ytdl').classList.remove('open');
+          setTimeout(() => { loadTracks(); }, 5000);
+        } else {
+          toast(data.error ? `Gagal: ${data.error}` : 'Gagal mengunduh');
+        }
+      } catch (e) {
+        toast('Kesalahan jaringan saat mengunduh');
+      }
+    });
+
+    /* Track Row Options Sheet */
+    function openTrackOptions(trackId) {
+      const t = allTracks.find(item => item.id === trackId);
+      if (!t) return;
+      selectedTrackForOptions = t;
+      document.getElementById('opt-sheet-song-title').textContent = t.title;
+
+      const isSaved = offlineTrackIds.has(t.id);
+      document.getElementById('act-opt-save-txt').textContent = isSaved ? 'Hapus dari Penyimpanan HP' : 'Simpan ke HP (Offline)';
+      document.getElementById('sheet-track-options').classList.add('open');
+    }
+
+    document.getElementById('btn-close-options').onclick = () => {
+      document.getElementById('sheet-track-options').classList.remove('open');
+    };
+
+    document.getElementById('act-opt-addpl').onclick = () => {
+      document.getElementById('sheet-track-options').classList.remove('open');
+      if (selectedTrackForOptions) openPlaylistPicker(selectedTrackForOptions.id);
+    };
+
+    document.getElementById('act-opt-save').onclick = async () => {
+      document.getElementById('sheet-track-options').classList.remove('open');
+      if (!selectedTrackForOptions) return;
+      const isSaved = offlineTrackIds.has(selectedTrackForOptions.id);
+      if (isSaved) await removeTrackOffline(selectedTrackForOptions.id);
+      else await saveTrackOffline(selectedTrackForOptions);
+    };
+
+    document.getElementById('act-opt-meta').onclick = () => {
+      document.getElementById('sheet-track-options').classList.remove('open');
+      document.getElementById('sheet-meta').classList.add('open');
+    };
+
+    /* Bottom Navigation 5 Tabs */
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        haptic(6);
+        triggerPop(btn, 'tab-pop', 380);
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if (activeDetailView) closeDetailView();
+
+        const tab = btn.dataset.tab;
+        previousActiveTab = tab;
+
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        const targetView = document.getElementById(`view-${tab}`);
+        if (targetView) targetView.classList.add('active');
+
+        document.getElementById('search-box').style.display = (tab === 'home' || tab === 'tracks' || tab === 'albums') ? 'block' : 'none';
+
+        if (tab === 'tracks') applyFilter();
+        if (tab === 'albums') renderAllAlbumsGrid();
+        if (tab === 'playlists') loadPlaylists();
+        if (tab === 'offline') {
+          updateOfflineUI();
+          renderOfflineTracks();
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    /* Global Click Delegation */
+    document.addEventListener('click', (e) => {
+      // Album Card tap (opens Apple Music Album Detail View!)
+      const albumCard = e.target.closest('[data-album]');
+      if (albumCard) {
+        haptic(8);
+        const albumName = decodeURIComponent(albumCard.dataset.album);
+        openAlbumDetail(albumName);
+        return;
+      }
+
+      // Playlist Card tap (opens Apple Music Playlist Detail View!)
+      const playlistCard = e.target.closest('[data-playlist]');
+      if (playlistCard) {
+        const plId = playlistCard.dataset.playlist;
+        openPlaylistDetail(plId);
+        return;
+      }
+
+      // Artist item tap
+      const artistItem = e.target.closest('[data-artist]');
+      if (artistItem) {
+        const artistName = decodeURIComponent(artistItem.dataset.artist);
+        document.getElementById('search-input').value = artistName;
+        document.querySelector('[data-tab="tracks"]').click();
+        applyFilter();
+        return;
+      }
+
+      // Track item tap in main list
+      const trackRow = e.target.closest('.track-item[data-idx]');
+      if (trackRow && !e.target.closest('.btn-track-action')) {
+        haptic(10);
+        const idx = parseInt(trackRow.dataset.idx, 10);
+        playTrackInQueue(filteredTracks, idx);
+        return;
+      }
+
+      // Track row tap in album detail
+      const albTrackRow = e.target.closest('.album-track-row[data-alb-idx]');
+      if (albTrackRow && !e.target.closest('.btn-track-action')) {
+        const idx = parseInt(albTrackRow.dataset.albIdx, 10);
+        const alb = albumsMap.get(document.getElementById('album-detail-title').textContent);
+        if (alb) playTrackInQueue(alb.tracks, idx);
+        return;
+      }
+
+      // Track row tap in playlist detail
+      const plTrackRow = e.target.closest('.album-track-row[data-pl-idx]');
+      if (plTrackRow && !e.target.closest('.btn-track-action')) {
+        const idx = parseInt(plTrackRow.dataset.plIdx, 10);
+        const plName = document.getElementById('playlist-detail-title').textContent;
+        const pl = playlistsList.find(p => p.name === plName);
+        if (pl) {
+          const trackSet = new Set(pl.trackIds || []);
+          const plTracks = allTracks.filter(t => trackSet.has(t.id));
+          playTrackInQueue(plTracks, idx);
+        }
+        return;
+      }
+
+      // Track row tap in offline list
+      const offTrackRow = e.target.closest('.track-item[data-off-id]');
+      if (offTrackRow && !e.target.closest('.btn-track-action')) {
+        const offId = offTrackRow.dataset.offId;
+        const offTracks = allTracks.filter(t => offlineTrackIds.has(t.id));
+        const idx = offTracks.findIndex(t => t.id === offId);
+        if (idx !== -1) playTrackInQueue(offTracks, idx);
+        return;
+      }
+
+      // More button on any track row
+      const moreBtn = e.target.closest('[data-more]');
+      if (moreBtn) {
+        e.stopPropagation();
+        openTrackOptions(moreBtn.dataset.more);
+        return;
+      }
+
+      // Remove from offline button
+      const removeOffBtn = e.target.closest('[data-remove-off]');
+      if (removeOffBtn) {
+        e.stopPropagation();
+        removeTrackOffline(removeOffBtn.dataset.removeOff);
+        return;
+      }
+
+      // Tap lyric line to jump audio!
+      const lyricLine = e.target.closest('.lyric-line[data-lrc-idx]');
+      if (lyricLine) {
+        const idx = parseInt(lyricLine.dataset.lrcIdx, 10);
+        if (parsedLrc[idx]) audio.currentTime = parsedLrc[idx].t;
+        return;
+      }
+    });
+
+    /* Filter sorting chips */
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        haptic(6);
+        triggerPop(chip, 'chip-pop', 280);
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        currentSort = chip.dataset.sort;
+        applyFilter();
+      });
+    });
+
+    document.getElementById('search-input').addEventListener('input', applyFilter);
+
+    document.getElementById('link-see-all-albums').onclick = () => {
+      document.querySelector('[data-tab="albums"]').click();
+    };
+
+    /* Now Playing Modal Open & Dismiss + Smooth Touch Drag Dismiss */
+    const playerModal = document.getElementById('player-modal');
+    document.getElementById('mini-player').onclick = (e) => {
+      if (e.target.closest('.mini-btn')) return;
+      playerModal.classList.add('open');
+      playerModal.style.transform = '';
+    };
+    document.getElementById('btn-close-player').onclick = () => {
+      playerModal.classList.remove('open');
+      playerModal.style.transform = '';
+    };
+    document.getElementById('btn-grabber-player').onclick = () => {
+      playerModal.classList.remove('open');
+      playerModal.style.transform = '';
+    };
+
+    let pTouchStartY = 0;
+    let pTouchDeltaY = 0;
+    let isDraggingModal = false;
+
+    function onModalTouchStart(e) {
+      if (e.touches.length !== 1) return;
+      pTouchStartY = e.touches[0].clientY;
+      pTouchDeltaY = 0;
+      isDraggingModal = true;
+      playerModal.style.transition = 'none';
+    }
+
+    function onModalTouchMove(e) {
+      if (!isDraggingModal) return;
+      const currentY = e.touches[0].clientY;
+      pTouchDeltaY = currentY - pTouchStartY;
+      if (pTouchDeltaY > 0) {
+        playerModal.style.transform = `translateY(${pTouchDeltaY}px)`;
+      }
+    }
+
+    function onModalTouchEnd() {
+      if (!isDraggingModal) return;
+      isDraggingModal = false;
+      playerModal.style.transition = 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)';
+      if (pTouchDeltaY > 80) {
+        playerModal.classList.remove('open');
+        playerModal.style.transform = '';
+      } else {
+        playerModal.style.transform = '';
+      }
+      pTouchDeltaY = 0;
+    }
+
+    const grabberEl = document.getElementById('btn-grabber-player');
+    const modalTopEl = document.querySelector('.player-modal-top');
+    if (grabberEl) {
+      grabberEl.addEventListener('touchstart', onModalTouchStart, { passive: true });
+      grabberEl.addEventListener('touchmove', onModalTouchMove, { passive: true });
+      grabberEl.addEventListener('touchend', onModalTouchEnd);
+    }
+    if (modalTopEl) {
+      modalTopEl.addEventListener('touchstart', onModalTouchStart, { passive: true });
+      modalTopEl.addEventListener('touchmove', onModalTouchMove, { passive: true });
+      modalTopEl.addEventListener('touchend', onModalTouchEnd);
+    }
+
+    // Now Playing Play/Pause/Skip Controls
+    document.getElementById('mini-btn-play').onclick = (e) => { e.stopPropagation(); togglePlay(); };
+    document.getElementById('mini-btn-next').onclick = (e) => { e.stopPropagation(); playNext(); };
+    document.getElementById('ctrl-play').onclick = togglePlay;
+    document.getElementById('ctrl-prev').onclick = playPrev;
+    document.getElementById('ctrl-next').onclick = playNext;
+
+    document.getElementById('ctrl-shuffle').onclick = () => {
+      isShuffle = !isShuffle;
+      document.getElementById('ctrl-shuffle').classList.toggle('active', isShuffle);
+      toast(isShuffle ? 'Mode acak aktif' : 'Mode acak nonaktif');
+    };
+
+    document.getElementById('ctrl-repeat').onclick = () => {
+      const repBtn = document.getElementById('ctrl-repeat');
+      if (repeatMode === 'off') {
+        repeatMode = 'all';
+        repBtn.classList.add('active');
+        toast('Ulangi semua lagu');
+      } else if (repeatMode === 'all') {
+        repeatMode = 'one';
+        repBtn.classList.add('active');
+        toast('Ulangi 1 lagu');
+      } else {
+        repeatMode = 'off';
+        repBtn.classList.remove('active');
+        toast('Ulangi nonaktif');
+      }
+    };
+
+    // Favorite heart toggle with dynamic heart-pop animation
+    document.getElementById('btn-fav-now').onclick = () => {
+      if (!currentTrack) return;
+      haptic(16);
+      const favBtn = document.getElementById('btn-fav-now');
+      triggerPop(favBtn, 'heart-pop', 450);
+
+      fetch('/api/fav', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: currentTrack.id }),
+      }).then(res => res.json()).then(data => {
+        currentTrack.fav = data.fav;
+        favBtn.innerHTML = heartSvg(data.fav, 22);
+        triggerPop(favBtn, 'heart-pop', 450);
+        renderTracks();
+        if (data.fav) toast('✓ Disimpan ke Favorit');
+        else toast('Dihapus dari Favorit');
+      });
+    };
+
+    // Now Playing Top Action Bar Buttons
+    const btnNpAddPl = document.getElementById('btn-np-addpl'); if (btnNpAddPl) btnNpAddPl.onclick = () => {
+      if (currentTrack) openPlaylistPicker(currentTrack.id);
+    };
+    document.getElementById('btn-np-more').onclick = () => {
+      if (currentTrack) openTrackOptions(currentTrack.id);
+    };
+
+    // Now Playing Bottom Utility Bar Buttons
+    document.getElementById('btn-util-lyrics').onclick = () => {
+      isLyricsMode = !isLyricsMode;
+      const lyricsView = document.getElementById('player-lyrics-view');
+      const coverWrap = document.getElementById('player-cover-wrap');
+      const btn = document.getElementById('btn-util-lyrics');
+
+      if (isLyricsMode) {
+        coverWrap.style.display = 'none';
+        lyricsView.classList.add('active');
+        btn.classList.add('active');
+      } else {
+        coverWrap.style.display = 'block';
+        lyricsView.classList.remove('active');
+        btn.classList.remove('active');
+      }
+    };
+
+    document.getElementById('btn-util-addpl').onclick = () => {
+      if (currentTrack) openPlaylistPicker(currentTrack.id);
+    };
+
+    document.getElementById('btn-util-queue').onclick = openQueueSheet;
+
+    document.getElementById('btn-util-save').onclick = async () => {
+      if (!currentTrack) return;
+      const isSaved = offlineTrackIds.has(currentTrack.id);
+      if (isSaved) await removeTrackOffline(currentTrack.id);
+      else await saveTrackOffline(currentTrack);
+    };
+
+    // Offline Actions
+    document.getElementById('btn-dl-all-fav').onclick = async () => {
+      const favs = allTracks.filter(t => t.fav);
+      if (!favs.length) {
+        toast('Belum ada lagu yang ditandai favorit');
+        return;
+      }
+      toast(`Mulai mengunduh ${favs.length} lagu favorit...`);
+      for (const t of favs) {
+        if (!offlineTrackIds.has(t.id)) {
+          await saveTrackOffline(t);
+        }
+      }
+      toast('Semua lagu favorit selesai disimpan ke HP!');
+    };
+
+    document.getElementById('btn-clear-all-offline').onclick = async () => {
+      if (!confirm('Hapus semua lagu offline dari penyimpanan HP?')) return;
+      const db = await openOfflineDB();
+      const tx = db.transaction(['tracks', 'audio', 'covers'], 'readwrite');
+      tx.objectStore('tracks').clear();
+      tx.objectStore('audio').clear();
+      tx.objectStore('covers').clear();
+      await new Promise(r => { tx.oncomplete = r; });
+      offlineTrackIds.clear();
+      offlineAudioUrls.clear();
+      updateOfflineUI();
+      renderTracks();
+      renderOfflineTracks();
+      updateNowPlayingStorageBtn();
+      toast('Semua penyimpanan lagu di HP telah dibersihkan');
+    };
+
+
+    // Smooth backdrop dismissal for bottom sheets
+    document.querySelectorAll('.sheet-overlay').forEach(sheet => {
+      sheet.addEventListener('click', (e) => {
+        if (e.target === sheet) {
+          haptic(6);
+          sheet.classList.remove('open');
+        }
+      });
+    });
+
+    // Initial Launch
+    checkStatus();
+    loadOfflineIndex();
+    loadTracks();
+    loadPlaylists();
+
+    // iOS Safari Background Resume Stabilizer: prevent pitch shift and skipping
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        if (audio) {
+          audio.playbackRate = 1.0;
+          audio.preservesPitch = true;
+          if (audio.duration && !isNaN(audio.duration) && audio.duration > 0) {
+            const pct = (audio.currentTime / audio.duration) * 100;
+            const slider = document.getElementById('player-slider');
+            if (slider) slider.value = pct;
+            const currEl = document.getElementById('player-curr-time');
+            if (currEl) currEl.textContent = formatTime(audio.currentTime);
+            const remEl = document.getElementById('player-total-time');
+            if (remEl) remEl.textContent = '-' + formatTime(audio.duration - audio.currentTime);
+          }
+        }
+      }
+    });
+
+
+  </script>
+</body>
+</html>

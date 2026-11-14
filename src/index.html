@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' media: data: blob:; media-src 'self' media: blob:; connect-src 'self' media:;">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Armuse</title>
+  <script src="theme-init.js"></script>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="quality.css">
+</head>
+<body>
+<div id="app">
+
+  <aside id="sidebar" aria-label="Navigasi">
+    <div class="brand">
+      <img class="brand-mark" src="icon.png" alt="Armuse" width="32" height="32">
+      <span class="brand-name">Armuse</span>
+    </div>
+    <nav id="nav">
+      <button data-view="albums"><span data-ic="disc"></span><span class="lbl" data-i18n="nav.albums">Album</span></button>
+      <button data-view="artists"><span data-ic="user"></span><span class="lbl" data-i18n="nav.artists">Artis</span></button>
+      <button data-view="songs"><span data-ic="music"></span><span class="lbl" data-i18n="nav.songs">Lagu</span></button>
+      <button data-view="favorites"><span data-ic="heart"></span><span class="lbl" data-i18n="nav.favorites">Favorit</span></button>
+      <button data-view="playlists"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="15" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="11" y2="18"/><circle cx="19" cy="17" r="2"/><path d="M21 17V6l-4 1"/></svg><span class="lbl" data-i18n="nav.playlists">Playlist</span></button>
+      <button data-view="stats"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg><span class="lbl" data-i18n="nav.stats">Statistik</span></button>
+      <button data-view="tags"><span data-ic="tag"></span><span class="lbl" data-i18n="nav.tags">Tag &amp; genre</span></button>
+      <button data-view="youtube"><span data-ic="youtube"></span><span class="lbl" data-i18n="nav.youtube">Unduh YouTube</span></button>
+      <button data-view="remote"><span data-ic="smartphone"></span><span class="lbl" data-i18n="nav.remote">iPhone &amp; HP</span></button>
+    </nav>
+    <div class="side-foot">
+      <button data-view="folders" class="nav-foot"><span data-ic="folder"></span><span class="lbl" data-i18n="nav.folders">Folder musik</span></button>
+      <button data-view="support" class="nav-foot nav-support"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="lbl" data-i18n="nav.support">Dukung Kreator</span></button>
+      <button id="btn-settings" class="nav-foot" aria-haspopup="dialog"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="lbl" data-i18n="nav.settings">Pengaturan</span></button>
+      <p id="stats" class="stats"></p>
+    </div>
+  </aside>
+
+  <main id="main">
+    <header id="topbar">
+      <button id="btn-back" class="icon-btn" title="Kembali" aria-label="Kembali" hidden><span data-ic="back"></span></button>
+      <label class="search">
+        <span data-ic="search"></span>
+        <input id="search" type="search" placeholder="Cari lagu, artis, album, atau tag" data-i18n-ph="search.placeholder" autocomplete="off" spellcheck="false">
+      </label>
+      <div class="top-actions">
+        <span id="scan-status" class="scan-status" role="status" aria-live="polite"></span>
+        <button id="btn-scan" class="icon-btn" title="Pindai ulang folder" aria-label="Pindai ulang folder"><span data-ic="refresh"></span></button>
+      </div>
+      <div class="win-controls">
+        <button id="win-min" class="icon-btn winbtn" title="Minimalkan" aria-label="Minimalkan"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><line x1="2" y1="6" x2="10" y2="6"/></svg></button>
+        <button id="win-close" class="icon-btn winbtn winbtn-close" title="Tutup" aria-label="Tutup"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.2"><line x1="2" y1="2" x2="10" y2="10"/><line x1="10" y1="2" x2="2" y2="10"/></svg></button>
+      </div>
+      <div id="scan-bar" class="scan-bar" hidden><i></i></div>
+    </header>
+    <div id="selbar" class="selbar" hidden role="toolbar" aria-label="Aksi untuk lagu terpilih"></div>
+    <div id="content" tabindex="-1"></div>
+  </main>
+
+  <footer id="player" aria-label="Pemutar">
+    <div class="np">
+      <button id="np-cover" class="np-cover" aria-label="Buka album"></button>
+      <div class="np-meta">
+        <div id="np-title" class="np-title">Belum ada lagu</div>
+        <div id="np-artist" class="np-artist">Pilih lagu untuk mulai</div>
+        <button id="np-quality" class="q-badge" type="button" hidden></button>
+      </div>
+    </div>
+
+    <div class="transport">
+      <div class="ctrls">
+        <button id="np-fav" class="icon-btn" title="Favorit" aria-label="Favorit" data-i18n-aria="player.fav" aria-pressed="false"><span data-ic="heart"></span></button>
+        <button id="btn-shuffle" class="icon-btn" title="Acak" aria-label="Acak" data-i18n-aria="player.shuffle" aria-pressed="false"><span data-ic="shuffle"></span></button>
+        <button id="btn-prev" class="icon-btn" title="Sebelumnya" aria-label="Sebelumnya" data-i18n-aria="player.prev"><span data-ic="prev"></span></button>
+        <button id="btn-play" class="play-btn" title="Putar / jeda (Spasi)" aria-label="Putar" data-i18n-aria="player.play"><span data-ic="play"></span></button>
+        <button id="btn-next" class="icon-btn" title="Berikutnya" aria-label="Berikutnya" data-i18n-aria="player.next"><span data-ic="next"></span></button>
+        <button id="btn-repeat" class="icon-btn" title="Ulangi" aria-label="Ulangi" data-i18n-aria="player.repeat" aria-pressed="false"><span data-ic="repeat"></span></button>
+        <button id="np-addpl" class="icon-btn" title="Tambah ke playlist" aria-label="Tambah ke playlist" data-i18n-aria="player.addToPlaylist"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="14" y2="6"/><line x1="3" y1="12" x2="14" y2="12"/><line x1="3" y1="18" x2="10" y2="18"/><line x1="18" y1="14" x2="18" y2="22"/><line x1="14" y1="18" x2="22" y2="18"/></svg></button>
+      </div>
+      <div class="seek-row">
+        <span id="t-cur" class="time">0:00</span>
+        <input id="seek" class="rng" type="range" min="0" max="1000" value="0" step="1" aria-label="Posisi lagu">
+        <span id="t-dur" class="time">0:00</span>
+      </div>
+    </div>
+
+    <div class="extras">
+      <button id="btn-mute" class="icon-btn" title="Bisukan" aria-label="Bisukan" data-i18n-aria="player.mute"><span data-ic="volume"></span></button>
+      <input id="vol" class="rng vol" type="range" min="0" max="100" value="80" aria-label="Volume">
+      <button id="btn-sleep" class="icon-btn" title="Timer tidur" aria-label="Timer tidur" data-i18n-aria="player.sleepTimer"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
+      <button id="btn-island" class="icon-btn" title="Dynamic Island (Mode Mini 2)" aria-label="Dynamic Island"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><rect x="7" y="7.5" width="10" height="4" rx="2" fill="currentColor" stroke="none"/></svg></button>
+      <button id="btn-mini" class="icon-btn" title="Mode mini" aria-label="Mode mini" data-i18n-aria="player.miniMode"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="13" y="13" width="6" height="6" rx="1"/></svg></button>
+      <button id="btn-queue" class="icon-btn tab-btn" title="Antrean" aria-label="Antrean" data-i18n-aria="player.queue" aria-pressed="false"><span data-ic="list"></span></button>
+      <button id="btn-eq" class="icon-btn tab-btn" title="Equalizer" aria-label="Equalizer" data-i18n-aria="player.eq" aria-pressed="false"><span data-ic="sliders"></span></button>
+    </div>
+  </footer>
+
+  <aside id="drawer" aria-label="Panel samping" inert>
+    <div class="drawer-tabs" role="tablist">
+      <button role="tab" data-tab="queue">Antrean</button>
+      <button role="tab" data-tab="eq">Equalizer</button>
+      <button role="tab" data-tab="quality">Kualitas</button>
+      <button id="drawer-close" class="icon-btn" aria-label="Tutup panel"><span data-ic="x"></span></button>
+    </div>
+
+    <section id="tab-queue" class="tab" role="tabpanel"></section>
+
+    <section id="tab-eq" class="tab" role="tabpanel">
+      <div class="eq-top">
+        <label class="switch">
+          <input type="checkbox" id="eq-on" checked>
+          <span class="knob"></span>
+          <span class="switch-lbl">Equalizer aktif</span>
+        </label>
+        <button id="eq-reset" class="btn-quiet">Reset</button>
+      </div>
+      <div class="eq-preset">
+        <select id="eq-preset" aria-label="Preset equalizer"></select>
+        <button id="eq-save" class="btn-quiet" title="Simpan pengaturan saat ini sebagai preset">Simpan preset</button>
+        <button id="eq-del" class="btn-quiet" title="Hapus preset kustom" hidden>Hapus</button>
+      </div>
+      <div class="eq-graph"><canvas id="eq-canvas" aria-label="Kurva respons frekuensi"></canvas></div>
+      <div id="eq-bands" class="eq-bands"></div>
+      <div class="preamp">
+        <label for="eq-pre">Penguat awal</label>
+        <input id="eq-pre" class="rng" type="range" min="-12" max="12" step="0.5" value="0">
+        <output id="eq-pre-out">0 dB</output>
+      </div>
+      <p class="eq-hint">Suara pecah saat band dinaikkan? Turunkan penguat awal. Klik dua kali sebuah band untuk mengembalikannya ke 0 dB.</p>
+    </section>
+
+    <section id="tab-quality" class="tab" role="tabpanel"></section>
+  </aside>
+
+  <div id="ctx" class="menu" role="menu" hidden></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  </div>
+</div>
+
+<!-- #nowplaying sengaja diletakkan DI LUAR #app (bukan lagi di dalamnya): saat mode mini aktif,
+     #app diberi opacity:0 + pointer-events:none lewat CSS (body.mini-mode #app). Kalau overlay ini
+     masih jadi anak #app, dia ikut jadi transparan & tidak bisa diklik walau windownya dibesarkan
+     sementara untuk menampilkannya (lihat app.js: openMiniOverlay). Dipindah ke sini supaya bebas
+     dari efek opacity/pointer-events milik #app. -->
+<div id="nowplaying" class="npov" aria-hidden="true" inert>
+  <div class="npov-head">
+    <button id="npov-close" class="icon-btn" aria-label="Tutup"><span data-ic="x"></span></button>
+    <button id="npov-album-link" class="btn-quiet">Buka album</button>
+  </div>
+  <div class="npov-body">
+    <div class="npov-art">
+      <div id="npov-cover" class="npov-cover"></div>
+      <canvas id="visualizer" class="npov-viz" aria-hidden="true"></canvas>
+      <h2 id="npov-title">Belum ada lagu</h2>
+      <div id="npov-artist" class="npov-artist"></div>
+      <button id="npov-quality" class="q-badge" type="button" hidden></button>
+      <div class="npov-actions">
+        <button id="npov-fav" class="icon-btn" aria-label="Favorit" aria-pressed="false"><span data-ic="heart"></span></button>
+        <button id="npov-addpl" class="icon-btn" aria-label="Tambah ke playlist"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="14" y2="6"/><line x1="3" y1="12" x2="14" y2="12"/><line x1="3" y1="18" x2="10" y2="18"/><line x1="18" y1="14" x2="18" y2="22"/><line x1="14" y1="18" x2="22" y2="18"/></svg></button>
+        <button id="npov-share" class="icon-btn" aria-label="Bagikan" data-i18n-aria="share.button"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg></button>
+      </div>
+    </div>
+    <div class="npov-panel">
+      <div class="npov-tabs" role="tablist">
+        <button role="tab" class="active" data-npt="lyrics" data-i18n="lyrics.tabLyrics">Lirik</button>
+        <button role="tab" data-npt="queue" data-i18n="lyrics.tabQueue">Antrean</button>
+        <button role="tab" data-npt="quality" data-i18n="lyrics.tabQuality">Kualitas</button>
+      </div>
+      <section id="npt-lyrics" class="npt active">
+        <div class="lyr-top">
+          <div id="lyr-langs" class="lyr-langs"></div>
+          <button id="lyr-search-btn" class="btn-quiet" data-i18n="lyrics.searchOnlineShort" title="Cari lirik online">Cari online</button>
+          <button id="lyr-edit" class="btn-quiet" data-i18n="lyrics.edit">Edit lirik</button>
+        </div>
+        <div id="lyr-body" class="lyr-body"></div>
+      </section>
+      <section id="npt-queue" class="npt"></section>
+      <section id="npt-quality" class="npt">
+        <p class="lyr-hint">Rincian format dan jalur sinyal ada di panel Kualitas.</p>
+        <button class="btn-quiet" data-act="open-quality-drawer">Buka panel Kualitas</button>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div id="mini-bar">
+  <div id="mb-menu-panel">
+    <div class="inner" id="mb-menu-default">
+      <button data-menu="playlist" role="menuitem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="14" y2="6"/><line x1="3" y1="12" x2="14" y2="12"/><line x1="3" y1="18" x2="10" y2="18"/><line x1="18" y1="14" x2="18" y2="22"/><line x1="14" y1="18" x2="22" y2="18"/></svg> <span data-i18n="mini.playlist">Tambah ke playlist</span></button>
+      <div class="mini-menu-sep"></div>
+      <button data-menu="shuffle" role="menuitem"><span data-ic="shuffle"></span> <span data-i18n="mini.shuffle">Acak</span></button>
+      <button data-menu="repeat" role="menuitem"><span data-ic="repeat"></span> <span data-i18n="mini.repeat">Ulangi</span></button>
+      <div class="mini-menu-sep"></div>
+      <div class="mb-vol-row">
+        <button type="button" id="mb-mute" class="icon-btn" aria-label="Bisukan"><span data-ic="volume"></span></button>
+        <input type="range" id="mb-volume" class="rng vol" min="0" max="100" value="80" aria-label="Volume">
+      </div>
+    </div>
+    <!-- Checklist playlist ringkas, tampil menggantikan menu di atas saat "Tambah ke playlist" diklik.
+         Sengaja BUKAN dialog besar seperti di mode full: semua tetap muat di tinggi window mini yang
+         sudah dibesarkan sedikit untuk menu (lihat main.js MINI_MENU_EXTRA), jadi tidak perlu resize
+         window tambahan sama sekali untuk fitur ini. -->
+    <div class="inner mb-plp" id="mb-menu-playlist" hidden>
+      <button type="button" class="mb-plp-back" data-menu="back" role="menuitem">‹ Kembali</button>
+      <div class="mini-menu-sep"></div>
+      <div class="mb-plp-list" id="mb-plp-list"></div>
+      <button type="button" data-menu="playlist-new" role="menuitem">+ Playlist baru</button>
+    </div>
+  </div>
+  <div id="mb-bar">
+    <div class="mini-cover" id="mb-cover"></div>
+    <div class="mini-meta">
+      <div id="mb-title" class="mini-title">Belum ada lagu</div>
+      <div id="mb-artist" class="mini-artist">Armuse</div>
+      <button id="mb-quality" class="q-badge" type="button" hidden></button>
+    </div>
+    <div class="mini-ctrls">
+      <button id="mb-fav" class="icon-btn" aria-label="Favorit" aria-pressed="false"><span data-ic="heart"></span></button>
+      <div class="mini-sep-v"></div>
+      <button id="mb-prev" class="icon-btn" aria-label="Sebelumnya"><span data-ic="prev"></span></button>
+      <button id="mb-play" class="icon-btn" aria-label="Putar / jeda"><span data-ic="play"></span></button>
+      <button id="mb-next" class="icon-btn" aria-label="Berikutnya"><span data-ic="next"></span></button>
+      <div class="mini-sep-v"></div>
+      <button id="mb-menu-trigger" class="icon-btn" aria-label="Menu" aria-haspopup="true" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+      </button>
+      <button id="mb-to-island" class="icon-btn" title="Dynamic Island (Mode Mini 2)" aria-label="Dynamic Island">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><rect x="3" y="4" width="18" height="16" rx="3"/><rect x="7" y="7.5" width="10" height="4" rx="2" fill="currentColor" stroke="none"/></svg>
+      </button>
+      <button id="mb-expand" class="icon-btn" title="Perbesar" aria-label="Perbesar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Dynamic Island (Mode Mini ke-2): kapsul interaktif adaptif dengan 5 slide multi-tasking -->
+<div id="dynamic-island" aria-label="Dynamic Island" aria-hidden="true">
+  <div class="di-shell">
+    <!-- Baris kapsul ringkas (selalu tampil di atas) -->
+    <div class="di-pill" id="di-pill">
+      <div class="di-pill-left" id="di-pill-toggle" title="Klik untuk membuka/menutup slide Dynamic Island">
+        <div class="di-cover" id="di-cover"></div>
+        <div class="di-meta">
+          <div class="di-title" id="di-title">Belum ada lagu</div>
+          <div class="di-sub" id="di-artist">Armuse Dynamic Island</div>
+          <div class="di-quality-row">
+            <span class="di-pill-badge" id="di-pill-badge" hidden></span>
+          </div>
+        </div>
+      </div>
+      <div class="di-pill-right">
+        <canvas id="di-wave" width="60" height="22" aria-hidden="true" title="Spektrum Audio Live"></canvas>
+        <div class="di-quick-ctrls">
+          <button type="button" id="di-q-prev" class="di-ibtn" title="Sebelumnya" aria-label="Sebelumnya"><span data-ic="prev"></span></button>
+          <button type="button" id="di-q-play" class="di-play-pill" title="Putar / Jeda" aria-label="Putar"><span data-ic="play"></span></button>
+          <button type="button" id="di-q-next" class="di-ibtn" title="Berikutnya" aria-label="Berikutnya"><span data-ic="next"></span></button>
+        </div>
+        <button type="button" id="di-expand-toggle" class="di-ibtn di-chev" title="Buka Slide Dynamic Island" aria-label="Buka Slide">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <button type="button" id="di-to-mini" class="di-ibtn" title="Ke Mode Mini Klasik" aria-label="Mode Mini Klasik">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="12" y="12" width="7" height="7" rx="1"/></svg>
+        </button>
+        <button type="button" id="di-to-full" class="di-ibtn" title="Kembali ke Mode Penuh" aria-label="Mode Penuh">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Deck slide saat Dynamic Island diperluas -->
+    <div class="di-deck" id="di-deck">
+      <div class="di-viewport" id="di-viewport">
+        <div class="di-track" id="di-track">
+          <!-- Slide 0: Pemutar Utama & Seek -->
+          <section class="di-slide" data-slide="0" aria-label="Pemutar">
+            <div class="di-s0-top">
+              <div class="di-s0-info">
+                <span class="di-chip-badge" id="di-s0-badge">Hi-Res Audio</span>
+                <div class="di-s0-album" id="di-s0-album">Pilih lagu untuk mulai memutar</div>
+              </div>
+              <div class="di-s0-modes">
+                <button type="button" id="di-fav" class="di-ibtn" title="Favorit" aria-pressed="false"><span data-ic="heart"></span></button>
+                <button type="button" id="di-shuffle" class="di-ibtn" title="Acak" aria-pressed="false"><span data-ic="shuffle"></span></button>
+                <button type="button" id="di-repeat" class="di-ibtn" title="Ulangi" aria-pressed="false"><span data-ic="repeat"></span></button>
+              </div>
+            </div>
+            <div class="di-seek-wrap">
+              <span class="di-time" id="di-t-cur">0:00</span>
+              <input type="range" id="di-seek" class="rng di-rng" min="0" max="1000" value="0" step="1" aria-label="Posisi lagu">
+              <span class="di-time" id="di-t-dur">0:00</span>
+            </div>
+            <div class="di-s0-bottom">
+              <div class="di-vol-wrap">
+                <button type="button" id="di-mute" class="di-ibtn" aria-label="Bisukan"><span data-ic="volume"></span></button>
+                <input type="range" id="di-vol" class="rng di-rng" min="0" max="100" value="80" aria-label="Volume">
+              </div>
+              <div class="di-s0-step">
+                <button type="button" class="di-pill-btn" data-di-act="seek-back" title="Mundur 10 detik">-10d</button>
+                <button type="button" class="di-pill-btn" data-di-act="seek-fwd" title="Maju 10 detik">+10d</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Slide 1: Lirik Live & Terjemahan Sinkron -->
+          <section class="di-slide" data-slide="1" aria-label="Lirik Live">
+            <div class="di-slide-head">
+              <span class="di-slide-title">Lirik Sinkron</span>
+              <button type="button" class="di-mini-act" id="di-lyr-search">Cari Online</button>
+            </div>
+            <div class="di-lyrics-box" id="di-lyrics-box">
+              <p class="di-lyr-prev" id="di-lyr-prev"></p>
+              <p class="di-lyr-cur" id="di-lyr-cur">Putar lagu untuk menampilkan lirik berjalan otomatis.</p>
+              <p class="di-lyr-next" id="di-lyr-next"></p>
+            </div>
+          </section>
+
+          <!-- Slide 2: Antrean Berikutnya (Up Next) -->
+          <section class="di-slide" data-slide="2" aria-label="Antrean Berikutnya">
+            <div class="di-slide-head">
+              <span class="di-slide-title" id="di-q-head">Berikutnya di Antrean</span>
+              <button type="button" class="di-mini-act" data-di-act="shuffle-queue">Acak Antrean</button>
+            </div>
+            <div class="di-upnext-list" id="di-upnext-list"></div>
+          </section>
+
+          <!-- Slide 3: Studio Equalizer & Visualizer -->
+          <section class="di-slide" data-slide="3" aria-label="Equalizer & Spektrum">
+            <div class="di-slide-head">
+              <span class="di-slide-title">Preset Suara &amp; Spektrum</span>
+              <button type="button" class="di-mini-act" id="di-eq-toggle">EQ Aktif</button>
+            </div>
+            <canvas id="di-eq-viz" class="di-eq-viz" width="380" height="44"></canvas>
+            <div class="di-eq-chips" id="di-eq-chips"></div>
+          </section>
+
+          <!-- Slide 4: Utilitas Cepat (Sleep Timer, Fokus Pomodoro, Server iPhone) -->
+          <section class="di-slide" data-slide="4" aria-label="Utilitas & Timer">
+            <div class="di-slide-head">
+              <span class="di-slide-title">Timer &amp; Pendamping</span>
+              <span class="di-remote-pill" id="di-remote-pill">HP: Port 4000</span>
+            </div>
+            <div class="di-tasks-grid">
+              <div class="di-task-card">
+                <div class="di-task-lbl">Timer Tidur <b id="di-sleep-val">Mati</b></div>
+                <div class="di-task-btns">
+                  <button type="button" class="di-chip-btn" data-di-sleep="15">15m</button>
+                  <button type="button" class="di-chip-btn" data-di-sleep="30">30m</button>
+                  <button type="button" class="di-chip-btn" data-di-sleep="end">Akhir</button>
+                  <button type="button" class="di-chip-btn" data-di-sleep="off">Off</button>
+                </div>
+              </div>
+              <div class="di-task-card">
+                <div class="di-task-lbl">Fokus Kerja <b id="di-pomo-val">25:00</b></div>
+                <div class="di-task-btns">
+                  <button type="button" class="di-chip-btn" id="di-pomo-toggle">Mulai</button>
+                  <button type="button" class="di-chip-btn" id="di-pomo-mode">25m</button>
+                  <button type="button" class="di-chip-btn" id="di-pomo-reset">Reset</button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Navigasi Bawah Slide (Dots + Panah) -->
+      <div class="di-nav-bar">
+        <button type="button" class="di-nav-arr" id="di-prev-slide" aria-label="Slide sebelumnya">‹</button>
+        <div class="di-dots" id="di-dots" role="tablist">
+          <button type="button" class="di-dot active" data-go-slide="0" title="Pemutar"><span>Pemutar</span></button>
+          <button type="button" class="di-dot" data-go-slide="1" title="Lirik Live"><span>Lirik</span></button>
+          <button type="button" class="di-dot" data-go-slide="2" title="Antrean"><span>Antrean</span></button>
+          <button type="button" class="di-dot" data-go-slide="3" title="Equalizer"><span>Audio</span></button>
+          <button type="button" class="di-dot" data-go-slide="4" title="Timer & Tugas"><span>Utilitas</span></button>
+        </div>
+        <button type="button" class="di-nav-arr" id="di-next-slide" aria-label="Slide berikutnya">›</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dialog id="editor" aria-labelledby="ed-h"></dialog>
+<dialog id="prompt" aria-labelledby="pr-title"></dialog>
+<dialog id="playlist-picker" aria-labelledby="plp-h"></dialog>
+<dialog id="lyr-editor" aria-labelledby="lyred-h"></dialog>
+<dialog id="settings" aria-labelledby="settings-h"></dialog>
+<dialog id="share" aria-labelledby="share-h"></dialog>
+<dialog id="wrapped" aria-labelledby="wrapped-h"></dialog>
+
+<audio id="audio" preload="auto"></audio>
+
+<script src="util.js"></script>
+<script src="jpSearch.js"></script>
+<script src="engine.js"></script>
+<script src="eq.js"></script>
+<script src="editor.js"></script>
+<script src="quality.js"></script>
+<script src="compare.js"></script>
+<script src="lyrics.js"></script>
+<script src="playlists.js"></script>
+<script src="nowplaying.js"></script>
+<script src="sleeptimer.js"></script>
+<script src="stats.js"></script>
+<script src="visualizer.js"></script>
+<script src="outputdevice.js"></script>
+<script src="settings.js"></script>
+<script src="share.js"></script>
+<script src="wrapped.js"></script>
+<script src="youtube.js"></script>
+<script src="remote.js"></script>
+<script src="support.js"></script>
+<script src="island.js"></script>
+<script src="liquid-glass.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

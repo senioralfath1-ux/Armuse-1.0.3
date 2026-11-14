@@ -1,0 +1,8 @@
+{
+  "watch": ["main.js", "preload.js", "lib", "src", "package.json"],
+  "ext": "js,json,html,css",
+  "ignore": ["node_modules", "dist", "build", "*.log"],
+  "exec": "electron .",
+  "env": { "NODE_ENV": "development" },
+  "delay": 300
+}

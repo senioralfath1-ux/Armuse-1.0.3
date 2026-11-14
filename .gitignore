@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build & distribution outputs
+dist/
+out/
+release/
+
+# Local binaries & large media artifacts
+bin/*.exe
+*.mp4
+*.zip
+
+# Backup & scratch files
+__pycache__/
+*.pyc
+*.bak
+.cadangan-kualitas/
+.cadangan-root/
+test_eval.js
+test_py.py
+
+# Logs & OS metadata
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db

@@ -1,0 +1,92 @@
+{
+  "name": "armuse",
+  "productName": "Armuse",
+  "version": "1.0.3",
+  "description": "Pemutar musik desktop audiophile open-source dengan Hi-Res/Lossless/Dolby Atmos, Equalizer 10-band, Uji A/B, Dynamic Island, Lirik Sinkron, YouTube Downloader, Google Drive Cloud, dan Aplikasi Pendamping iPhone PWA.",
+  "main": "main.js",
+  "homepage": "https://github.com/senioralfath1-ux/Armuse-1.0.3",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/senioralfath1-ux/Armuse-1.0.3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/senioralfath1-ux/Armuse-1.0.3/issues"
+  },
+  "funding": {
+    "type": "saweria",
+    "url": "https://saweria.co/alfaathhh"
+  },
+  "scripts": {
+    "start": "electron .",
+    "dev": "nodemon",
+    "dist": "electron-builder",
+    "dist:dir": "electron-builder --dir"
+  },
+  "build": {
+    "appId": "local.armuse.app",
+    "productName": "Armuse",
+    "files": [
+      "main.js",
+      "preload.js",
+      "lib/**/*",
+      "src/**/*",
+      "bin/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.music",
+      "icon": "build/icon.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "AudioVideo;Audio;Player",
+      "icon": "build/icon.png",
+      "desktop": {
+        "entry": {
+          "Name": "Armuse",
+          "Comment": "Pemutar musik lokal audiophile dengan fitur lengkap",
+          "Keywords": "armuse;musik;music;player;audio;mp3;flac;lossless;"
+        }
+      }
+    },
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "icon": "build/icon.png",
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "Armuse"
+    },
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**",
+      "bin/**"
+    ]
+  },
+  "license": "MIT",
+  "dependencies": {
+    "ffmpeg-static": "^5.3.0",
+    "music-metadata": "^11.15.0",
+    "node-id3": "^0.2.9",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "electron": "^44.4.3",
+    "electron-builder": "^26.15.3",
+    "electron-reload": "^2.0.0-alpha.1",
+    "nodemon": "^3.1.14"
+  },
+  "author": {
+    "name": "Alfath",
+    "url": "https://saweria.co/alfaathhh"
+  }
+}
