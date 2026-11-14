@@ -28,11 +28,10 @@
       <button data-view="tags"><span data-ic="tag"></span><span class="lbl" data-i18n="nav.tags">Tag &amp; genre</span></button>
       <button data-view="youtube"><span data-ic="youtube"></span><span class="lbl" data-i18n="nav.youtube">Unduh YouTube</span></button>
       <button data-view="remote"><span data-ic="smartphone"></span><span class="lbl" data-i18n="nav.remote">iPhone &amp; HP</span></button>
-      <button data-view="support" class="nav-support"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="lbl" data-i18n="nav.support">Support Us</span></button>
+      <button data-view="support"><span data-ic="heart"></span><span class="lbl" data-i18n="nav.support">Support Us</span></button>
     </nav>
     <div class="side-foot">
       <button data-view="folders" class="nav-foot"><span data-ic="folder"></span><span class="lbl" data-i18n="nav.folders">Folder musik</span></button>
-      <button id="btn-support-foot" class="nav-foot nav-support-cta" type="button" data-support-act="open-modal"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="lbl" data-i18n="support.ctaFoot">Support Saweria</span></button>
       <button id="btn-settings" class="nav-foot" aria-haspopup="dialog"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="lbl" data-i18n="nav.settings">Pengaturan</span></button>
       <p id="stats" class="stats"></p>
     </div>
@@ -47,10 +46,6 @@
       </label>
       <div class="top-actions">
         <span id="scan-status" class="scan-status" role="status" aria-live="polite"></span>
-        <button id="btn-saweria-top" class="btn-saweria-pill" type="button" data-support-act="open-modal" title="Support Us — Dukung Alfath via Saweria (saweria.co/alfaathhh)">
-          <svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          <span data-i18n="support.topbarBtn">Support Us</span>
-        </button>
         <button id="btn-scan" class="icon-btn" title="Pindai ulang folder" aria-label="Pindai ulang folder"><span data-ic="refresh"></span></button>
       </div>
       <div class="win-controls">
@@ -93,7 +88,6 @@
     <div class="extras">
       <button id="btn-mute" class="icon-btn" title="Bisukan" aria-label="Bisukan" data-i18n-aria="player.mute"><span data-ic="volume"></span></button>
       <input id="vol" class="rng vol" type="range" min="0" max="100" value="80" aria-label="Volume">
-      <button id="btn-support-player" class="icon-btn support-player-btn" type="button" data-support-act="open-modal" title="Support Us (Saweria)" aria-label="Support Us"><svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
       <button id="btn-sleep" class="icon-btn" title="Timer tidur" aria-label="Timer tidur" data-i18n-aria="player.sleepTimer"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg></button>
       <button id="btn-island" class="icon-btn" title="Dynamic Island (Mode Mini 2)" aria-label="Dynamic Island"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><rect x="7" y="7.5" width="10" height="4" rx="2" fill="currentColor" stroke="none"/></svg></button>
       <button id="btn-mini" class="icon-btn" title="Mode mini" aria-label="Mode mini" data-i18n-aria="player.miniMode"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="13" y="13" width="6" height="6" rx="1"/></svg></button>
@@ -392,7 +386,6 @@
 <dialog id="playlist-picker" aria-labelledby="plp-h"></dialog>
 <dialog id="lyr-editor" aria-labelledby="lyred-h"></dialog>
 <dialog id="settings" aria-labelledby="settings-h"></dialog>
-<dialog id="support-dlg" aria-labelledby="support-dlg-h"></dialog>
 <dialog id="share" aria-labelledby="share-h"></dialog>
 <dialog id="wrapped" aria-labelledby="wrapped-h"></dialog>
 
