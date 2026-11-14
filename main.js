@@ -564,15 +564,26 @@ function startCustomDrag() {
   if (dragTimer) { clearInterval(dragTimer); dragTimer = null; }
   const startCur = screen.getCursorScreenPoint();
   const startB = win.getBounds();
+  const dragStartTime = Date.now();
   dragTimer = setInterval(() => {
     if (!win || win.isDestroyed()) { clearInterval(dragTimer); dragTimer = null; return; }
+    // Timeout darurat 10 detik bila OS kehilangan event mouseup saat kursor di luar jendela
+    if (Date.now() - dragStartTime > 10000) {
+      clearInterval(dragTimer);
+      dragTimer = null;
+      return;
+    }
     const cur = screen.getCursorScreenPoint();
-    const nx = startB.x + (cur.x - startCur.x);
-    const ny = startB.y + (cur.y - startCur.y);
+    let nx = startB.x + (cur.x - startCur.x);
+    let ny = startB.y + (cur.y - startCur.y);
+    const disp = screen.getDisplayNearestPoint({ x: nx + Math.round(startB.width / 2), y: ny });
+    const wa = disp.workArea;
+    // Boundary clamp: pastikan kapsul/bar tidak pernah bisa terlempar keluar dari monitor
+    nx = Math.max(wa.x, Math.min(nx, wa.x + wa.width - startB.width));
+    ny = Math.max(wa.y, Math.min(ny, wa.y + wa.height - startB.height));
     win.setBounds({ x: nx, y: ny, width: startB.width, height: startB.height });
     if (islandMode) {
-      const disp = screen.getDisplayNearestPoint({ x: nx + Math.round(startB.width / 2), y: ny });
-      const dockedNow = ny <= disp.workArea.y + 10;
+      const dockedNow = ny <= wa.y + 10;
       if (dockedNow !== islandDocked) {
         islandDocked = dockedNow;
         win.webContents.send('win:island-dock', islandDocked);
@@ -627,13 +638,17 @@ function setMiniExtra(extra, duration = 200) {
 
 function enterMini(origin) {
   if (!win || (miniMode && !islandMode)) return;
-  if (!miniMode && !islandMode) savedBounds = win.getBounds();
+  if (!miniMode && !islandMode) {
+    if (win.isMaximized()) win.unmaximize();
+    savedBounds = win.getBounds();
+  }
   miniMode = true;
   islandMode = false;
   islandExpanded = false;
   miniExtra = 0;
   setCompactMinSize(true);
   win.setResizable(false);
+  win.setAlwaysOnTop(true);
   win.webContents.send('win:mode-changing', 'mini'); // renderer mulai crossfade CSS SEKARANG (paralel)
 
   const refBounds = savedBounds || win.getBounds();
@@ -651,7 +666,7 @@ function enterMini(origin) {
   x = Math.max(wa.x, Math.min(x, wa.x + wa.width - MINI_W));
   y = Math.max(wa.y, Math.min(y, wa.y + wa.height - MINI_H));
   const target = { x, y, width: MINI_W, height: MINI_H };
-  animateBounds(target, 290, () => { if (win) win.setAlwaysOnTop(true, 'floating'); }, 0.32);
+  animateBounds(target, 290, () => { if (win) win.setAlwaysOnTop(true); }, 0.32);
 }
 
 function computeIslandBounds(expanded) {
@@ -669,7 +684,10 @@ function computeIslandBounds(expanded) {
 
 function enterIsland() {
   if (!win || islandMode) return;
-  if (!miniMode && !islandMode) savedBounds = win.getBounds();
+  if (!miniMode && !islandMode) {
+    if (win.isMaximized()) win.unmaximize();
+    savedBounds = win.getBounds();
+  }
   miniMode = false;
   islandMode = true;
   islandExpanded = false;
@@ -677,11 +695,11 @@ function enterIsland() {
   miniExtra = 0;
   setCompactMinSize(true);
   win.setResizable(false);
-  win.setAlwaysOnTop(true, 'screen-saver');
+  win.setAlwaysOnTop(true);
   win.webContents.send('win:mode-changing', 'island');
   win.webContents.send('win:island-dock', true);
   const target = computeIslandBounds(false);
-  animateBounds(target, 310, () => { if (win) win.setAlwaysOnTop(true, 'screen-saver'); }, 0.42);
+  animateBounds(target, 310, () => { if (win) win.setAlwaysOnTop(true); }, 0.42);
 }
 
 function setIslandExpanded(expanded) {
@@ -749,13 +767,10 @@ function registerGlobalShortcuts() {
   tryReg(sc.toggleIsland, () => {
     if (!win || win.isDestroyed()) return;
     if (islandMode) {
-      if (win.isVisible() && !win.isMinimized()) {
-        win.hide();
-      } else {
-        if (win.isMinimized()) win.restore();
-        win.show();
-        win.focus();
-      }
+      exitIsland();
+      if (win.isMinimized()) win.restore();
+      win.show();
+      win.focus();
     } else {
       if (miniMode) exitMini();
       if (win.isMinimized()) win.restore();
@@ -768,13 +783,10 @@ function registerGlobalShortcuts() {
   tryReg(sc.toggleMini, () => {
     if (!win || win.isDestroyed()) return;
     if (miniMode) {
-      if (win.isVisible() && !win.isMinimized()) {
-        win.hide();
-      } else {
-        if (win.isMinimized()) win.restore();
-        win.show();
-        win.focus();
-      }
+      exitMini();
+      if (win.isMinimized()) win.restore();
+      win.show();
+      win.focus();
     } else {
       if (islandMode) exitIsland();
       if (win.isMinimized()) win.restore();

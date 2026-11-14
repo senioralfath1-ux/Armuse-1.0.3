@@ -1551,11 +1551,12 @@
       let dragArm = false, dragActive = false, downSX = 0, downSY = 0, suppressNextClick = false;
       window.addEventListener('mousedown', (e) => {
         if (e.button !== 0) return;
-        if (e.target.closest('input, select, textarea, .rng, .slot, [contenteditable]')) return;
+        // Elemen interaktif tidak boleh memicu drag jendela (baik di mode penuh maupun mode mini / island)
+        if (e.target.closest('input, select, textarea, .rng, .slot, [contenteditable], button, a, .icon-btn, .di-ibtn, .di-play-pill, [role="button"], .q-badge, .menu-item, .di-s0-seek-area')) return;
         const inCompact = document.body.classList.contains('island-mode') || document.body.classList.contains('mini-mode');
         const inFullDragZone = e.target.closest('#topbar, #sidebar, #player, .npov-head, .head, .album-head');
         if (!inCompact && !inFullDragZone) return;
-        if (!inCompact && e.target.closest('button, a, .album, .row')) return;
+        if (!inCompact && e.target.closest('.album, .row')) return;
         dragArm = true;
         dragActive = false;
         downSX = e.screenX;
@@ -1572,7 +1573,7 @@
       }, true);
 
       const finishWindowDrag = () => {
-        if (!dragArm) return;
+        if (!dragArm && !dragActive) return;
         dragArm = false;
         if (dragActive) {
           dragActive = false;
@@ -1584,6 +1585,8 @@
       };
       window.addEventListener('mouseup', finishWindowDrag, true);
       window.addEventListener('blur', finishWindowDrag);
+      window.addEventListener('pointerup', finishWindowDrag, true);
+      document.addEventListener('mouseleave', finishWindowDrag);
       window.addEventListener('click', (e) => {
         if (suppressNextClick) {
           e.stopPropagation();
