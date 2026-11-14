@@ -1,8 +1,8 @@
 'use strict';
-/* Halaman & kartu "Dukung Kreator" (Support) — Saweria & Open Source GitHub */
+/* Panel & Dialog "Support Us" (Dukung Kreator) — Saweria & Open Source GitHub */
 (function () {
   const RD = window.RD;
-  const { $, esc, ic, toast } = RD;
+  const { $, esc, toast } = RD;
   const api = window.api;
 
   const SAWERIA_URL = 'https://saweria.co/alfaathhh';
@@ -160,6 +160,77 @@
     `;
   }
 
+  function renderDialogHtml() {
+    return `
+      <div class="dlg-head support-dlg-head">
+        <div class="support-dlg-title-row">
+          <span class="support-heart-pill">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </span>
+          <div>
+            <h2 id="support-dlg-h">${esc(tt('support.title'))}</h2>
+            <p>${esc(tt('support.about.byline', { author: AUTHOR_NAME }))}</p>
+          </div>
+        </div>
+        <button type="button" class="icon-btn" data-support-act="close-modal" aria-label="Tutup">
+          <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="dlg-body support-dlg-body">
+        <div class="support-dlg-grid">
+          <div class="remote-qr-box support-dlg-qr-col">
+            <div class="remote-qr-wrapper support-qr-wrapper" data-support-act="open-saweria" title="${esc(tt('support.saweria.openBtn'))}">
+              ${SAWERIA_QR_SVG}
+            </div>
+            <div class="scan-hint-badge">
+              <span>${esc(tt('support.saweria.qrBadge'))}</span>
+            </div>
+            <code class="support-dlg-url">${esc(SAWERIA_URL)}</code>
+          </div>
+          <div class="support-dlg-info-col">
+            <p class="support-story">${esc(tt('support.about.story'))}</p>
+            <div class="support-actions-stack">
+              <button type="button" class="btn-primary support-btn-main" data-support-act="open-saweria">
+                <svg class="ic" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span>${esc(tt('support.saweria.openBtn'))} (saweria.co/alfaathhh)</span>
+              </button>
+              <div class="remote-actions-row">
+                <button type="button" class="btn-ghost remote-btn-half" data-support-act="copy-saweria">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  <span>${esc(tt('remote.url.copy'))} Link Saweria</span>
+                </button>
+                <button type="button" class="btn-ghost remote-btn-half" data-support-act="open-github">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <span>${esc(tt('support.github.starBtn'))}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="dlg-foot">
+        <button type="button" class="btn-quiet" data-support-act="go-support-view">${esc(tt('support.settings.viewPage'))}</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn-primary" data-support-act="close-modal">${esc(tt('settings.done'))}</button>
+      </div>
+    `;
+  }
+
+  function openModal() {
+    const dlg = $('#support-dlg');
+    if (!dlg) {
+      if (RD.nav) RD.nav('support');
+      return;
+    }
+    dlg.innerHTML = renderDialogHtml();
+    if (!dlg.open) dlg.showModal();
+  }
+
+  function closeModal() {
+    const dlg = $('#support-dlg');
+    if (dlg && dlg.open) dlg.close();
+  }
+
   function settingsBlockHtml() {
     return `
       <section class="settings-block support-settings-block">
@@ -187,10 +258,19 @@
 
   function bindEvents(root = document) {
     root.addEventListener('click', (e) => {
+      const dlg = $('#support-dlg');
+      if (dlg && dlg.open && e.target === dlg) {
+        closeModal();
+        return;
+      }
       const btn = e.target.closest('[data-support-act]');
       if (!btn) return;
       const act = btn.dataset.supportAct;
-      if (act === 'open-saweria') {
+      if (act === 'open-modal') {
+        openModal();
+      } else if (act === 'close-modal') {
+        closeModal();
+      } else if (act === 'open-saweria') {
         openLink(SAWERIA_URL);
       } else if (act === 'copy-saweria') {
         copyText(SAWERIA_URL, 'support.toast.copied');
@@ -199,8 +279,9 @@
       } else if (act === 'copy-github') {
         copyText(GITHUB_URL, 'support.toast.copied');
       } else if (act === 'go-support-view') {
-        const dlg = $('#settings');
-        if (dlg && dlg.open) dlg.close();
+        const sDlg = $('#settings');
+        if (sDlg && sDlg.open) sDlg.close();
+        closeModal();
         if (RD.nav) RD.nav('support');
       }
     });
@@ -211,6 +292,8 @@
     GITHUB_URL,
     AUTHOR_NAME,
     render: renderView,
+    openModal,
+    closeModal,
     settingsBlockHtml,
     openLink,
     init() {

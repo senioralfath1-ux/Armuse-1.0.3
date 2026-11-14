@@ -304,9 +304,10 @@
       'editor.savedToast': 'Tag berhasil disimpan',
 
       // Support / Dukung Kreator
-      'nav.support': 'Dukung Kreator',
-      'support.topbarBtn': 'Support Saweria',
-      'support.title': 'Dukung Armuse',
+      'nav.support': 'Support Us',
+      'support.topbarBtn': 'Support Us',
+      'support.ctaFoot': 'Support Saweria',
+      'support.title': 'Support Us — Dukung Armuse',
       'support.subtitle': 'Armuse 100% gratis, bebas iklan, dan open-source. Dikembangkan secara independen oleh {author}.',
       'support.saweria.bannerTitle': 'Traktir Kopi lewat Saweria',
       'support.saweria.bannerSub': 'Dukung pengembangan fitur baru Armuse oleh {author}',
@@ -631,9 +632,10 @@
       'editor.savedToast': 'Tags saved successfully',
 
       // Support Creator
-      'nav.support': 'Support Creator',
-      'support.topbarBtn': 'Support Saweria',
-      'support.title': 'Support Armuse',
+      'nav.support': 'Support Us',
+      'support.topbarBtn': 'Support Us',
+      'support.ctaFoot': 'Support Saweria',
+      'support.title': 'Support Us — Armuse',
       'support.subtitle': 'Armuse is 100% free, ad-free, and open-source. Independently crafted by {author}.',
       'support.saweria.bannerTitle': 'Support via Saweria',
       'support.saweria.bannerSub': 'Help {author} keep building new features for Armuse',
@@ -958,9 +960,10 @@
       'editor.savedToast': 'タグを保存しました',
 
       // Support Creator
-      'nav.support': '開発者を支援',
-      'support.topbarBtn': 'Saweria 支援',
-      'support.title': 'Armuse を支援する',
+      'nav.support': 'Support Us',
+      'support.topbarBtn': 'Support Us',
+      'support.ctaFoot': 'Saweria 支援',
+      'support.title': 'Support Us — Armuse を支援',
       'support.subtitle': 'Armuse は完全無料・広告なしのオープンソース音楽プレーヤーです。{author} が個人開発しています。',
       'support.saweria.bannerTitle': 'Saweria で開発者を応援',
       'support.saweria.bannerSub': '{author} による Armuse の継続的な機能開発をサポート',

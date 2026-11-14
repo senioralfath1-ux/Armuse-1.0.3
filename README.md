@@ -1,205 +1,112 @@
-# Armuse
+<div align="center">
+  <img src="banner.jpg" alt="Armuse Banner" width="100%" />
 
-[![Support via Saweria](https://img.shields.io/badge/☕_Support_via_Saweria-alfaathhh-f97316?style=for-the-badge&logo=buymeacoffee&logoColor=white)](https://saweria.co/alfaathhh)
-[![GitHub Repo](https://img.shields.io/badge/GitHub-Armuse_1.0.3-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/senioralfath1-ux/Armuse-1.0.3)
-[![License: MIT](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)](LICENSE)
+  # Armuse
 
-**Pemutar musik desktop audiophile open-source** untuk koleksi lagu pribadi Anda — lengkap dengan deteksi **Hi-Res Lossless & Dolby Atmos**, **Equalizer 10-band**, **Uji Kualitas A/B**, **Dynamic Island 5-Slide**, **Lirik Sinkron Multi-Bahasa**, **YouTube Audio Downloader**, **Google Drive Cloud Streaming**, dan **Aplikasi Pendamping iPhone / Smartphone (PWA)**.
+  **Pemutar musik desktop gratis & open-source untuk audiophile dan penikmat musik kasual.**  
+  Tanpa iklan, tanpa pelacakan, dan 100% menghormati privasi data lokal Anda.
 
-Dibuat oleh **Alfath** · Lisensi **MIT** · Tanpa iklan, tanpa langganan, dan menghormati privasi lokal Anda.
+  **Tersedia untuk:** Windows • macOS • Linux • iPhone / Android (PWA)
 
-- **☕ Dukung Kreator (Saweria):** [https://saweria.co/alfaathhh](https://saweria.co/alfaathhh)
-- **⭐ Repositori GitHub:** [https://github.com/senioralfath1-ux/Armuse-1.0.3](https://github.com/senioralfath1-ux/Armuse-1.0.3)
-
----
-
-## Daftar Fitur Utama
-
-### 1. Pustaka Musik & Pencarian Pintar Multi-Aksara
-- **Tampilan Lengkap:** Jelajahi koleksi berdasarkan **Album**, **Artis**, **Lagu**, **Favorit**, **Playlist**, **Statistik**, dan **Tag & Genre**.
-- **Format Audio yang Didukung:** `MP3`, `FLAC`, `M4A`, `AAC`, `OGG`, `OPUS`, dan `WAV`.
-- **Sampul Album Otomatis & Warna Aksen Adaptif:** Membaca sampul yang tertanam di file lagu atau file gambar di folder album (`cover.jpg`, `folder.jpg`, `front.png`, `albumart.jpg`). Warna aksen antarmuka otomatis menyesuaikan palet warna sampul lagu yang sedang diputar.
-- **Pencarian Jepang & Romaji Pintar (`jpSearch`):** Mendukung transliterasi dua arah secara otomatis antara **Romaji ↔ Hiragana ↔ Katakana ↔ Kanji**. Anda dapat mengetik judul lagu J-Pop/Anime dengan huruf latin (Romaji) untuk menemukan lagu beraksara Jepang, atau sebaliknya.
-
-### 2. Lencana Kualitas Audio, Jalur Sinyal & Perbandingan A/B
-- **Deteksi Kualitas Presisi:** Menampilkan lencana otomatis di pemutar: **Hi-Res Lossless** (>48 kHz / ≥24-bit), **Lossless** (FLAC, ALAC, WAV, AIFF), **Dolby Atmos (JOC)**, **Dolby Digital Plus (E-AC-3)**, atau detail codec & bitrate format terkompresi.
-- **Inspeksi Jalur Sinyal:** Buka panel samping **Kualitas** untuk melihat rincian bit-depth, sample rate, channel, serta diagram rantai pemrosesan sinyal (*Sumber File → Equalizer 10-Band → Pembatas Puncak -0.3 dBFS → Perangkat Output*).
-- **Uji Dengar Bandingkan Kualitas (A/B):** Bandingkan file asli Anda (**A**) dengan versi terkompresi (**B** — `AAC 256/128 kbps`, `MP3 320/128 kbps`, `Opus 96/48 kbps`) secara *real-time* tanpa jeda dengan perataan volume otomatis (*loudness matching*).
-
-### 3. Equalizer 10-Band & Pemilihan Perangkat Output Audio
-- **Equalizer 10-Band Real-Time:** Mengatur frekuensi `31 Hz` hingga `16 kHz` (±12 dB) lengkap dengan **Penguat Awal (Preamp)**, pembatas anti-pecah (*limiter*), kurva respons frekuensi interaktif, dan spektrum analyzer langsung.
-- **11 Preset Bawaan & Preset Kustom:** Termasuk *Flat, Bass Boost, Treble Boost, V-Shape, Vocal, Rock, Pop, Jazz, Classical, Electronic, Acoustic*, serta fitur simpan racikan preset Anda sendiri.
-- **Pemilihan Perangkat Output Audio:** Di halaman **Folder musik**, Anda bisa memilih langsung perangkat keluaran (DAC eksternal, headphone, atau speaker) tanpa mengubah perangkat default sistem operasi.
-
-### 4. Layar *Now Playing*, Visualizer & Lirik Sinkron Multi-Tier
-- **Layar Penuh Now Playing:** Klik sampul lagu di kiri bawah untuk membuka tampilan panggung dengan sampul besar, **Visualizer Spektrum Audio**, antrean, dan lirik.
-- **Mesin Lirik Multi-Tier (`LRC` & Teks):**
-  1. Memeriksa lirik tersimpan/manual dan cache lokal terlebih dahulu (100% offline saat memutar).
-  2. Tombol **Cari online** mengambil lirik sinkron waktu (`[mm:ss.xx]`) maupun lirik biasa secara paralel dari **LRCLIB** dan *fallback* **Kugou** (sangat akurat untuk lagu Indonesia, Barat, J-Pop, dan Anime).
-  3. Mendukung klik baris lirik untuk melompat ke detik lagu tersebut, tab multi-bahasa (**Auto / Indonesia / English / 日本語**), dan **Editor Lirik Manual** per bahasa.
-
-### 5. Mode Jendela: Penuh, Mode Mini Klasik, Dynamic Island & System Tray
-- **Mode Mini Klasik (`Alt + M`):** Jendela pemutar ringkas dengan sampul, kontrol putar, favorit, volume, serta menu cepat tambah ke playlist.
-- **Dynamic Island (`Alt + I`):** Kapsul interaktif bergaya iOS di bagian atas layar dengan *auto-dock/peek* saat menempel di tepi atas layar dan **5 Slide Multi-Tasking**:
-  1. **Pemutar:** Info kualitas, seek bar, volume, favorit/acak/ulangi, dan lompat ±10 detik.
-  2. **Lirik Live:** Tampilan lirik sinkron 3 baris berjalan otomatis + pencarian lirik cepat.
-  3. **Antrean Berikutnya (Up Next):** Daftar lagu selanjutnya dan tombol acak antrean.
-  4. **Studio Audio:** Visualizer spektrum live, sakelar EQ, dan tombol ganti preset EQ cepat.
-  5. **Utilitas & Timer:** **Timer Tidur** cepat (`15m`, `30m`, `Akhir lagu`), **Timer Fokus Kerja (Pomodoro)** (`25m` / `15m` / `45m`), dan indikator status server HP.
-- **System Tray:** Menutup jendela utama (`X`) menyembunyikan Armuse ke *System Tray* agar musik dan server pendamping iPhone tetap berjalan di latar belakang.
-
-### 6. Statistik Dengar, "Wrapped Kamu" & Kartu Bagikan (Story 1080×1920)
-- **Statistik Dengar:** Mencatat total waktu dengar, total pemutaran, lagu paling sering diputar, artis favorit, album favorit, distribusi genre, dan lagu yang baru ditambahkan.
-- **✨ Wrapped Kamu:** Generator rekap musik ala *Spotify Wrapped* (6 slide: *Rekap Lengkap, Top 5 Lagu, Top 5 Artis, Waktu Dengar, Genre Musik, Penutup*) dengan 4 tema warna (*Acid, Violet, Coral, Lime*) dan opsi **Ekspor Semua (6 PNG)** resolusi penuh `1080×1920`.
-- **Kartu Bagikan Lagu (Share Card):** Ekspor kartu lagu `1080×1920` (simpan PNG atau salin ke clipboard) dengan 5 template (*Klasik, Jurnal, Kartu, Lirik, Vinyl*), pilihan latar, kutipan lirik, serta stiker yang bisa digeser.
-
-### 7. Penyimpanan Cloud Google Drive & Smart Cache Offline
-- **Streaming Langsung Tanpa Tunggu Unduh Penuh:** Di halaman **Folder musik → Penyimpanan Cloud**, tempel satu atau beberapa tautan folder publik Google Drive. Lagu langsung berputar instan berkat *multi-stage byte-range streaming* dan *pre-fetch* lagu berikutnya.
-- **Smart Cache Offline (LRU):** Mengatur batas jumlah lagu cloud yang disimpan otomatis di disk lokal (mis. 25, 50, 100, 250 lagu) lengkap dengan pustaka sampul album offline.
-
-### 8. Pengunduh & Konverter Audio YouTube (`yt-dlp` + `ffmpeg`)
-- **Unduh Langsung ke Pustaka:** Di menu **Unduh YouTube**, tempel tautan video YouTube, periksa pratinjau judul/durasi/sampul, pilih format audio (**MP3 320 kbps**, **FLAC Lossless**, **WAV PCM**, **M4A AAC 256 kbps**, atau **OPUS 160 kbps**), lalu unduh beserta metadata & thumbnail langsung masuk ke folder pustaka musik Anda.
-
-### 9. Aplikasi Pendamping iPhone & Smartphone (PWA Port 4000)
-- **Streaming & Offline di HP:** Buka menu **iPhone & HP** lalu pindai kode QR dengan kamera iPhone/Android di jaringan Wi-Fi yang sama (mendukung alamat IP LAN maupun mDNS permanen `http://<nama-pc>.local:4000`).
-- **Pengalaman Native iOS PWA:** Tambahkan ke Layar Utama (*Add to Home Screen* di Safari) untuk tampilan layar penuh bergaya Apple Music dengan 3 slide *Now Playing* (Sampul, Lirik, Antrean), audio latar belakang + kontrol layar kunci, dan fitur **Simpan Offline di Memori HP (IndexedDB)** untuk diputar saat keluar rumah tanpa internet.
-
-### 10. Tema Visual (Gelap, Terang, Liquid Glass) & Multi-Bahasa
-- **3 Tema Tampilan:** **Gelap** (biru tinta laut khas Armuse), **Terang**, dan **Glass (Air / Liquid Glass)** dengan efek kaca cair bening bergaya iOS dan riak air dinamis.
-- **3 Bahasa Antarmuka:** **Bahasa Indonesia**, **English**, dan **日本語 (Jepang)**.
+  [![Release](https://img.shields.io/badge/Release-v1.0.3-blue?style=flat-square)](https://github.com/senioralfath1-ux/Armuse-1.0.3/releases)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
+  [![Support via Saweria](https://img.shields.io/badge/☕_Saweria-Dukung_Kreator-f97316?style=flat-square&logo=buymeacoffee&logoColor=white)](https://saweria.co/alfaathhh)
+  [![GitHub Stars](https://img.shields.io/github/stars/senioralfath1-ux/Armuse-1.0.3?style=flat-square&color=yellow)](https://github.com/senioralfath1-ux/Armuse-1.0.3/stargazers)
+</div>
 
 ---
 
-## Menjalankan & Memasang Aplikasi
+## Fitur Utama
 
-### Cara Cepat (File Pemasang)
+- **Audio Audiophile & Bit-Perfect** — Deteksi otomatis Hi-Res Lossless (>48 kHz / 24-bit), FLAC/ALAC, Dolby Atmos (JOC), diagram rantai pemrosesan sinyal transparan, dan uji komparasi dengar A/B real-time tanpa jeda.
+- **Equalizer 10-Band & Limiter** — Kontrol frekuensi 31 Hz–16 kHz (±12 dB), 11 preset bawaan + custom, kurva respons interaktif, dan pemilihan perangkat output (DAC eksternal) langsung.
+- **Lirik Sinkron Multi-Tier** — Pengambilan lirik otomatis via LRCLIB & Kugou (J-Pop, Romaji, Barat, Indonesia), navigasi lompat detik klik-per-baris, dan editor lirik manual.
+- **Pencarian Pintar Multi-Aksara (`jpSearch`)** — Transliterasi otomatis dua arah Romaji ↔ Hiragana ↔ Katakana ↔ Kanji untuk pencarian lagu Anime/J-Pop tanpa repot ganti keyboard IME.
+- **Layar Now Playing & Visualizer** — Tampilan panggung resolusi penuh dengan sampul besar, lirik sinkron, dan spektrum audio visualizer real-time yang dinamis.
+- **Dynamic Island & Mode Mini** — Kapsul multitasking 5-slide bergaya iOS (`Alt+I`) dengan auto-dock di tepi atas layar, Mode Mini klasik (`Alt+M`), dan System Tray background player.
+- **Aplikasi Pendamping HP (PWA Port 4000)** — Pindai QR untuk akses pemutar bergaya Apple Music di iPhone/Android melalui jaringan lokal (`http://al.local:4000`), lengkap dengan kontrol layar kunci dan simpan offline (IndexedDB).
+- **Google Drive Cloud Streaming** — Putar langsung folder publik Google Drive secara instan (*byte-range streaming*) tanpa perlu menunggu unduh penuh, didukung smart cache LRU offline.
+- **YouTube Audio Downloader** — Unduh audio dari URL YouTube langsung ke pustaka musik lokal dalam format MP3 320 kbps, FLAC, WAV, M4A, atau Opus (`yt-dlp` + `ffmpeg`).
+- **Statistik & "Wrapped Kamu"** — Rekap kebiasaan mendengar 6-slide ala Spotify Wrapped (1080×1920) dan kartu cerita lagu siap ekspor PNG.
+- **3 Tema Visual & Multi-Bahasa** — Tema Dark (biru laut khas Armuse), Light, dan Liquid Glass (efek kaca cair iOS), serta antarmuka Bahasa Indonesia, English, dan 日本語.
 
-| Sistem Operasi | File Pemasang | Cara Pakai |
+---
+
+## Unduh & Pemasangan
+
+| Sistem Operasi | Berkas Instalasi | Panduan |
 |---|---|---|
-| **Windows** | `Armuse Setup 1.0.3.exe` | Klik dua kali, pilih folder instalasi, dan ikuti panduan pemasang |
-| **macOS** | `Armuse-1.0.3.dmg` | Buka file `.dmg`, lalu seret ikon **Armuse** ke folder `Applications` |
-| **Linux (AppImage)** | `Armuse-1.0.3.AppImage` | Beri izin jalan (`chmod +x Armuse-1.0.3.AppImage`), lalu klik dua kali |
-| **Linux (Debian/Ubuntu)** | `armuse_1.0.3_amd64.deb` | Jalankan `sudo apt install ./armuse_1.0.3_amd64.deb` |
+| **Windows** | `Armuse Setup 1.0.3.exe` | Unduh dari [Releases](https://github.com/senioralfath1-ux/Armuse-1.0.3/releases) lalu jalankan installer |
+| **macOS** | `Armuse-1.0.3.dmg` | Buka file `.dmg` dan seret ikon ke folder `Applications` |
+| **Linux (AppImage)** | `Armuse-1.0.3.AppImage` | Beri izin eksekusi (`chmod +x`), lalu jalankan |
+| **Linux (Debian/Ubuntu)** | `armuse_1.0.3_amd64.deb` | Pasang via `sudo apt install ./armuse_1.0.3_amd64.deb` |
+
+---
+
+## Development
+
+### Persyaratan
+* [Node.js](https://nodejs.org) (v18 atau lebih baru)
+* npm atau pnpm
 
 ### Menjalankan dari Kode Sumber
-
-Pastikan [Node.js](https://nodejs.org) (versi 18 atau lebih baru) sudah terpasang di komputer Anda.
-
 ```bash
+# Clone repositori
 git clone https://github.com/senioralfath1-ux/Armuse-1.0.3.git
 cd Armuse-1.0.3
+
+# Pasang dependensi
 npm install
+
+# Jalankan aplikasi (Development mode)
 npm start
 ```
 
-Untuk mode pengembangan dengan *auto-reload* (`nodemon`):
-```bash
-npm run dev
-```
-
-### Membuat File Pemasang Sendiri (Build)
-
+### Membuat File Installer (Build)
 ```bash
 npm run dist
 ```
-
-Hasil paket instalasi akan tersedia di dalam folder `dist/`.
-
----
-
-## Panduan Singkat Penggunaan
-
-### Memulai Pustaka Musik
-1. Buka **Armuse**, lalu klik **Tambah folder musik** di layar sambutan (atau buka menu **Folder musik** di bilah kiri).
-2. Pilih satu atau beberapa folder tempat lagu Anda disimpan. Seluruh subfolder akan dipindai secara otomatis.
-3. Untuk menambahkan koleksi dari cloud, buka tab **Penyimpanan Cloud** di halaman **Folder musik**, tempel tautan folder Google Drive, lalu klik **Sinkronkan Pustaka Cloud**.
-4. Tekan tombol **⟳ (Pindai ulang)** di kanan atas kapan saja untuk memperbarui pustaka.
-
-### Kontrol Pemutaran & Antrean
-
-| Aksi | Cara |
-|---|---|
-| Putar satu album | Klik sampul album lalu tekan **Putar**, atau klik tombol putar pada sampul |
-| Putar satu lagu | Klik dua kali pada baris lagu |
-| Pilih banyak lagu | Klik lagu pertama, lalu `Shift`+klik lagu terakhir (atau `Ctrl`/`Cmd`+klik satu per satu) |
-| Tambah ke antrean / Putar berikutnya | Klik kanan lagu atau album → **Putar berikutnya** / **Tambah ke antrean** |
-| Tambah ke playlist | Klik ikon `+ playlist` di pemutar atau klik kanan lagu → pilih playlist |
-| Buka layar penuh *Now Playing* & Lirik | Klik gambar sampul lagu kecil di pojok kiri bawah pemutar |
-| Buka Antrean / Equalizer / Kualitas | Klik ikon daftar atau slider di pojok kanan bawah pemutar |
-| Timer Tidur | Klik ikon bulan sabit di kanan bawah pemutar (`5`, `10`, `15`, `30`, `60` menit, atau *Sampai lagu ini selesai*) |
+Paket instalasi siap pakai akan dibuat di dalam direktori `dist/`.
 
 ---
 
-## Pintasan Papan Ketik (Keyboard Shortcuts)
+## Pintasan Keyboard Utama
 
-### Pintasan di Dalam Aplikasi
-
-| Tombol | Fungsi |
-|---|---|
-| `Spasi` | Putar / jeda lagu |
-| `Ctrl`/`Cmd` + `←` / `→` | Lagu sebelumnya / berikutnya |
-| `Shift` + `←` / `→` | Mundur / maju 10 detik |
-| `Ctrl`/`Cmd` + `F` atau `/` | Fokus ke kotak pencarian |
-| `Ctrl`/`Cmd` + `A` | Pilih semua lagu yang sedang tampil |
-| `Enter` | Putar lagu yang sedang dipilih |
-| `A` / `B` | Beralih instan antara audio Asli (A) dan Pembanding (B) saat tab Kualitas terbuka |
-| `Esc` | Tutup menu, dialog, panel samping, atau kosongkan pencarian |
-
-### Pintasan Keyboard Global (Berfungsi dari Aplikasi Mana Saja)
-Dapat diubah atau dinonaktifkan kapan saja melalui menu **Pengaturan → Pintasan Keyboard Global**:
-
-| Pintasan Bawaan | Fungsi |
-|---|---|
-| `Alt + I` | Buka / tutup mode **Dynamic Island** |
-| `Alt + M` | Buka / tutup **Mode Mini** klasik |
-| `Alt + Space` | Putar / jeda musik di latar belakang |
-| `Alt + Right` | Lagu berikutnya |
-| `Alt + Left` | Lagu sebelumnya |
-| `Alt + A` | Tampilkan / sembunyikan jendela utama **Armuse** |
+| Pintasan | Lingkup | Fungsi |
+|---|---|---|
+| `Alt + I` | Global | Buka / tutup mode **Dynamic Island** |
+| `Alt + M` | Global | Buka / tutup **Mode Mini** klasik |
+| `Alt + Space` | Global | Putar / jeda musik di latar belakang |
+| `Alt + ←` / `→` | Global | Lagu sebelumnya / berikutnya |
+| `Spasi` | Dalam Aplikasi | Putar / jeda pemutaran lagu |
+| `Ctrl`/`Cmd` + `F` | Dalam Aplikasi | Fokus ke kotak pencarian |
+| `A` / `B` | Dalam Aplikasi | Beralih instan perbandingan audio Asli (A) & Kompresi (B) |
 
 ---
 
-## Mengedit Tag & Sampul Lagu
+## Penyimpanan Data & Mode Portabel
 
-Klik kanan sebuah lagu → **Edit tag**, atau pilih banyak lagu sekaligus lalu klik **Edit tag** pada bilah pilihan di atas daftar.
-
-- **Kolom yang bisa diubah:** Judul, Artis, Artis Album, Album, Genre, Tahun, Nomor Lagu, Nomor Cakram, **Tag Saya** (label kustom seperti *santai*, *kerja*, *nostalgia*), **Rating Bintang (1–5)**, status **Favorit**, dan **Sampul Album**.
-- **Aman untuk File Asli:** Secara bawaan, seluruh perubahan disimpan di database internal Armuse tanpa memodifikasi file audio Anda. Jika ingin menulis tag langsung ke dalam file MP3 (agar terbaca di pemutar lain), centang opsi **"Tulis juga ke file MP3"** sebelum menekan **Simpan**.
-
----
-
-## Tempat Penyimpanan Data & Mode Portabel
-
-Pustaka, pengaturan, playlist, statistik, cache lirik, dan cache sampul disimpan di folder data aplikasi sistem:
-
+Pustaka, preferensi, playlist, dan cache disimpan secara lokal di:
 - **Windows:** `%APPDATA%\Armuse`
 - **macOS:** `~/Library/Application Support/Armuse`
 - **Linux:** `~/.config/Armuse`
 
-File musik asli Anda di folder lokal tidak pernah dipindahkan atau diubah.
-
-Untuk menjalankan Armuse dalam **mode portabel** (misalnya menyimpan seluruh data di flashdisk atau folder khusus), gunakan variabel lingkungan `ARMUSE_DATA_DIR` (atau `RD_DATA_DIR`):
-
+Untuk mode portabel (mis. flashdisk), gunakan variabel lingkungan:
 ```bash
 ARMUSE_DATA_DIR=/path/ke/folder-data npm start
 ```
 
 ---
 
-## Dukung Pengembangan Armuse ♥
+## Dukungan & Komunitas
 
-**Armuse** dikembangkan secara independen oleh **Alfath** dan dibagikan secara gratis serta *open-source* di bawah lisensi MIT.
+**Armuse** dikembangkan secara independen dan gratis untuk semua orang. Dukungan Anda sangat berarti untuk kelangsungan pengembangan fitur-fitur baru:
 
-Jika Anda menyukai Armuse dan ingin mendukung pengembangan fitur-fitur baru ke depannya, klik tombol di bawah ini:
-
-[![Traktir Kopi via Saweria](https://img.shields.io/badge/☕_Traktir_Kopi_di_Saweria-saweria.co%2Falfaathhh-f97316?style=for-the-badge&logo=buymeacoffee&logoColor=white)](https://saweria.co/alfaathhh)
-[![Beri Star di GitHub](https://img.shields.io/badge/⭐_Beri_Star_di_GitHub-Armuse_1.0.3-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/senioralfath1-ux/Armuse-1.0.3)
-
-- ☕ **Saweria:** [https://saweria.co/alfaathhh](https://saweria.co/alfaathhh) *(tersedia juga tombol **Support Saweria** di bilah atas aplikasi & kode QR di menu **Dukung Kreator**)*
-- ⭐ **GitHub:** Berikan bintang (*Star*) dan bagikan repositori [senioralfath1-ux/Armuse-1.0.3](https://github.com/senioralfath1-ux/Armuse-1.0.3)
+* ☕ **Dukung lewat Saweria:** [saweria.co/alfaathhh](https://saweria.co/alfaathhh)
+* ⭐ **Beri Star di GitHub:** [senioralfath1-ux/Armuse-1.0.3](https://github.com/senioralfath1-ux/Armuse-1.0.3)
 
 ---
 
 ## Lisensi
 
-Proyek ini dilisensikan di bawah **MIT License** — lihat berkas [LICENSE](LICENSE) untuk rincian lengkap.
+Proyek ini dilisensikan di bawah **[MIT License](LICENSE)** — bebas digunakan, dimodifikasi, dan didistribusikan.
