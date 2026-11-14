@@ -10,7 +10,7 @@
 
 <div align="center">
 
-  Armuse is a free, open-source music player without ads or tracking. Search for any song or artist, build playlists, and start listening.<br>
+  Armuse is a free, an music player app without ads or tracking. Search for any song or artist, build playlists, and start listening.<br>
   Runs on Windows, macOS, and Linux.
 
 </div>
